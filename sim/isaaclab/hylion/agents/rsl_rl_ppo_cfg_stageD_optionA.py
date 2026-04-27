@@ -164,9 +164,15 @@ class HylionPPORunnerCfg_StageD2_5(RslRlOnPolicyRunnerCfg):
 
 @configclass
 class HylionPPORunnerCfg_StageD3(RslRlOnPolicyRunnerCfg):
-    """Stage D3: base_mass ±0.5kg, 외력 ±3N (C2가 실패했던 수준 — 재도전)"""
+    """Stage D3: base_mass ±0.5kg, 외력 ±3N (C2가 실패했던 수준 — 재도전)
+
+    [2026-04-27 NaN 수정] D3에서 NaN 폭발 발생 이력:
+      - 원인: D2(epochs=2)에서 D3(epochs=3)으로 증가 + ±2.5→±3N 동시 변화
+      - 대응: num_learning_epochs를 2로 유지 (D2.5와 동일, 안정성 최우선)
+      - D3 안정화 확인 후 D4에서 epochs=3으로 복귀 가능
+    """
     num_steps_per_env = 16         # NaN 방지
-    max_iterations = 4000           # 더 많은 반복 (이전 실패 교훈)
+    max_iterations = 4000
     save_interval = 100
     experiment_name = "hylion"
     empirical_normalization = False
@@ -184,7 +190,7 @@ class HylionPPORunnerCfg_StageD3(RslRlOnPolicyRunnerCfg):
         use_clipped_value_loss=True,
         clip_param=0.10,
         entropy_coef=0.007,
-        num_learning_epochs=3,       # epochs 소폭 증가
+        num_learning_epochs=2,       # 2026-04-27 수정: NaN 재발 방지 (D2.5 수준 유지)
         num_mini_batches=4,
         learning_rate=5.0e-5,
         schedule="fixed",
