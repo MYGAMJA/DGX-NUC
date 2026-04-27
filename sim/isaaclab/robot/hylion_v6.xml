@@ -1,0 +1,318 @@
+<!-- ============================================================
+  Hylion v6  —  MuJoCo XML Format (MJCF)
+  IsaacLab policy sim-to-sim 검증용
+
+  물리 설정 (robot_cfg_BG.py 기준):
+    kp = 20, kd = 2, effort_limit = 6 Nm
+    sim_dt = 1/200 Hz, decimation = 8  →  control Hz = 25
+
+  obs 45-dim 구성:
+    [0:3]   velocity_commands  (vx, vy, wz)
+    [3:6]   base_ang_vel       (body frame)
+    [6:9]   projected_gravity  (body frame)
+    [9:21]  joint_pos_rel      (default offset 제거)
+    [21:33] joint_vel          (12 leg joints)
+    [33:45] last_action        (12)
+
+  action 12-dim:
+    target_pos = default_pos + action * 0.25
+    torque = kp*(target_pos − q) − kd*qdot  (clipped ±6 Nm)
+
+  default joint pos (robot_cfg_BG.py):
+    hip_pitch:  −0.2 rad
+    knee:        0.4 rad
+    ankle_pitch:−0.3 rad
+    others:      0.0 rad
+============================================================ -->
+
+<mujoco model="hylion_v6">
+
+  <!-- ── 시뮬레이션 옵션 ──────────────────────────────────────── -->
+  <option
+    timestep="0.005"
+    gravity="0 0 -9.81"
+    iterations="50"
+    noslip_iterations="4"
+    ls_iterations="50"
+    integrator="RK4"
+  />
+
+  <!-- ── 기본 geom 속성 (self-collision 비활성화) ──────────────── -->
+  <!--
+    로봇 geom: contype=1  conaffinity=0  → 지면하고만 충돌
+    지면 geom: contype=0  conaffinity=1
+    → 로봇끼리 self-collision 없음 (IsaacLab enabled_self_collisions=False 대응)
+  -->
+  <default>
+    <geom contype="1" conaffinity="0" friction="0.8 0.1 0.1" condim="3"/>
+    <joint damping="0.01" armature="0.007"/>
+    <motor ctrllimited="true" ctrlrange="-6 6"/>
+  </default>
+
+  <!-- ── 자산 ───────────────────────────────────────────────── -->
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.4 0.6 0.8" rgb2="0 0 0" width="512" height="512"/>
+    <texture name="texplane" type="2d" builtin="checker"
+             rgb1="0.2 0.2 0.2" rgb2="0.3 0.3 0.3" width="512" height="512"/>
+    <material name="matplane" texture="texplane" texrepeat="4 4" reflectance="0.2"/>
+    <material name="robot"   rgba="0.38 0.41 0.37 1"/>
+    <material name="ankle"   rgba="0.2  0.5  0.8  1"/>
+  </asset>
+
+  <!-- ── 월드 바디 ──────────────────────────────────────────── -->
+  <worldbody>
+
+    <!-- 조명 -->
+    <light name="sun"   pos="0 0 3"  dir="0 0 -1"  diffuse="0.9 0.9 0.9"/>
+    <light name="fill"  pos="2 2 2"  dir="-1 -1 -1" diffuse="0.4 0.4 0.4"/>
+
+    <!-- 지면 (conaffinity=1, contype=0 → 로봇하고만 충돌) -->
+    <geom name="ground"
+          type="plane" size="5 5 0.05"
+          contype="0" conaffinity="1"
+          friction="0.8 0.1 0.1"
+          material="matplane"/>
+
+    <!-- ────────────────────────────────────────────────────────
+         BASE  (freejoint → 공중 자유 운동)
+    ──────────────────────────────────────────────────────────── -->
+    <body name="base" pos="0 0 0.95">
+
+      <!-- 자유 관절: IsaacLab의 floating-base 대응 -->
+      <freejoint name="root"/>
+
+      <!-- IMU 센서 부착점 -->
+      <site name="imu_site" pos="0.0617 0 0.68" size="0.005"/>
+
+      <!-- base 충돌 box (BHL collision box 기준) -->
+      <geom name="base_col"
+            type="box" size="0.075 0.07 0.115"
+            pos="0 0 0.71"
+            material="robot"/>
+
+      <!-- ──────────────────────────────────────────────────────
+           LEFT LEG
+      ──────────────────────────────────────────────────────── -->
+
+      <!-- hip_roll_L -->
+      <body name="leg_left_hip_roll"
+            pos="-0.029092 0.080000 0.542631"
+            quat="0.92388 0.0 0.38268 0.0">
+        <joint name="leg_left_hip_roll_joint" type="hinge"
+               axis="0 0 1"
+               range="-0.174533 1.5708"
+               damping="0.01" armature="0.007"/>
+        <geom name="lhiproll_col" type="cylinder" size="0.03 0.03" material="robot"/>
+        <inertial pos="-0.00411 -0.000113 -0.04646"
+                  mass="0.8379"
+                  diaginertia="0.0025 0.0025 0.0010"/>
+
+        <!-- hip_yaw_L -->
+        <body name="leg_left_hip_yaw"
+              pos="0.027000 0.000000 -0.052000"
+              quat="0.5 -0.5 0.5 -0.5">
+          <joint name="leg_left_hip_yaw_joint" type="hinge"
+                 axis="0 0 1"
+                 range="-0.981748 0.589049"
+                 damping="0.01" armature="0.007"/>
+          <geom name="lhipyaw_col" type="cylinder" size="0.03 0.03" material="robot"/>
+          <inertial pos="-0.00412 -0.0000863 0.04633"
+                    mass="0.8377"
+                    diaginertia="0.0025 0.0025 0.0010"/>
+
+          <!-- hip_pitch_L -->
+          <body name="leg_left_hip_pitch"
+                pos="0.027000 0.000000 0.052000"
+                quat="0.65328 0.2706 -0.65328 -0.2706">
+            <joint name="leg_left_hip_pitch_joint" type="hinge"
+                   axis="0 0 1"
+                   range="-1.89805 0.981748"
+                   damping="0.01" armature="0.007"/>
+            <geom name="lhippitch_col" type="box" size="0.04 0.06 0.08"
+                  pos="0 0.06 0" material="robot"/>
+            <inertial pos="0.00304 0.12039 0.02109"
+                      mass="0.9480"
+                      diaginertia="0.004 0.001 0.004"/>
+
+            <!-- knee_L -->
+            <body name="leg_left_knee_pitch"
+                  pos="0.000000 0.150000 -0.018000"
+                  quat="0.0 0.0 0.0 -1.0">
+              <joint name="leg_left_knee_pitch_joint" type="hinge"
+                     axis="0 0 1"
+                     range="0 2.44346"
+                     damping="0.01" armature="0.007"/>
+              <geom name="lknee_col" type="box" size="0.035 0.06 0.07"
+                    pos="0 -0.06 0" material="robot"/>
+              <inertial pos="-0.0000414 -0.11225 0.02574"
+                        mass="0.6539"
+                        diaginertia="0.003 0.001 0.003"/>
+
+              <!-- ankle_pitch_L -->
+              <body name="leg_left_ankle_pitch"
+                    pos="0.000000 -0.160000 -0.003000"
+                    quat="0.0 0.0 0.0 -1.0">
+                <joint name="leg_left_ankle_pitch_joint" type="hinge"
+                       axis="0 0 1"
+                       range="-0.785398 0.785398"
+                       damping="0.01" armature="0.002"/>
+                <geom name="lanklepitch_col" type="box" size="0.03 0.03 0.02"
+                      pos="0.013 0.027 0.027" material="robot"/>
+                <inertial pos="0.01311 0.02737 0.02742"
+                          mass="0.1062"
+                          diaginertia="0.0003 0.0003 0.0002"/>
+
+                <!-- ankle_roll_L -->
+                <body name="leg_left_ankle_roll"
+                      pos="0.030000 0.050000 0.025000"
+                      quat="0.70711 0.0 0.70711 0.0">
+                  <joint name="leg_left_ankle_roll_joint" type="hinge"
+                         axis="0 0 1"
+                         range="-0.261799 0.261799"
+                         damping="0.01" armature="0.002"/>
+                  <!-- foot collision: box -->
+                  <geom name="lfoot_col" type="box" size="0.055 0.025 0.012"
+                        pos="0.02 0.023 0.02" material="ankle"/>
+                  <inertial pos="0.000023 0.022661 0.019784"
+                            mass="0.7065"
+                            diaginertia="0.002 0.001 0.002"/>
+                </body><!-- ankle_roll_L -->
+
+              </body><!-- ankle_pitch_L -->
+            </body><!-- knee_L -->
+          </body><!-- hip_pitch_L -->
+        </body><!-- hip_yaw_L -->
+      </body><!-- hip_roll_L -->
+
+      <!-- ──────────────────────────────────────────────────────
+           RIGHT LEG
+      ──────────────────────────────────────────────────────── -->
+
+      <!-- hip_roll_R -->
+      <body name="leg_right_hip_roll"
+            pos="-0.029092 -0.080000 0.542631"
+            quat="0.0 0.38268 -0.0 0.92388">
+        <joint name="leg_right_hip_roll_joint" type="hinge"
+               axis="0 0 1"
+               range="-1.5708 0.174533"
+               damping="0.01" armature="0.007"/>
+        <geom name="rhiproll_col" type="cylinder" size="0.03 0.03" material="robot"/>
+        <inertial pos="0.00411 -0.000185 -0.04645"
+                  mass="0.8379"
+                  diaginertia="0.0025 0.0025 0.0010"/>
+
+        <!-- hip_yaw_R -->
+        <body name="leg_right_hip_yaw"
+              pos="-0.027000 0.000000 -0.052000"
+              quat="0.5 -0.5 -0.5 0.5">
+          <joint name="leg_right_hip_yaw_joint" type="hinge"
+                 axis="0 0 1"
+                 range="-0.589049 0.981748"
+                 damping="0.01" armature="0.007"/>
+          <geom name="rhipyaw_col" type="cylinder" size="0.03 0.03" material="robot"/>
+          <inertial pos="0.00412 -0.0000139 0.04632"
+                    mass="0.8377"
+                    diaginertia="0.0025 0.0025 0.0010"/>
+
+          <!-- hip_pitch_R -->
+          <body name="leg_right_hip_pitch"
+                pos="-0.027000 0.000000 0.052000"
+                quat="0.65328 0.2706 -0.65328 -0.2706">
+            <joint name="leg_right_hip_pitch_joint" type="hinge"
+                   axis="0 0 1"
+                   range="-1.89805 0.981748"
+                   damping="0.01" armature="0.007"/>
+            <geom name="rhippitch_col" type="box" size="0.04 0.06 0.08"
+                  pos="0 0.06 0" material="robot"/>
+            <inertial pos="0.00320 0.12039 -0.02109"
+                      mass="0.9480"
+                      diaginertia="0.004 0.001 0.004"/>
+
+            <!-- knee_R -->
+            <body name="leg_right_knee_pitch"
+                  pos="0.000000 0.150000 0.018000">
+              <joint name="leg_right_knee_pitch_joint" type="hinge"
+                     axis="0 0 1"
+                     range="0 2.44346"
+                     damping="0.01" armature="0.007"/>
+              <geom name="rknee_col" type="box" size="0.035 0.06 0.07"
+                    pos="0 0.06 0" material="robot"/>
+              <inertial pos="-0.0000509 0.11225 -0.02574"
+                        mass="0.6539"
+                        diaginertia="0.003 0.001 0.003"/>
+
+              <!-- ankle_pitch_R -->
+              <body name="leg_right_ankle_pitch"
+                    pos="0.000000 0.160000 0.003000">
+                <joint name="leg_right_ankle_pitch_joint" type="hinge"
+                       axis="0 0 1"
+                       range="-0.785398 0.785398"
+                       damping="0.01" armature="0.002"/>
+                <geom name="ranklepitch_col" type="box" size="0.03 0.03 0.02"
+                      pos="0.013 0.027 -0.027" material="robot"/>
+                <inertial pos="0.01311 0.02737 -0.02742"
+                          mass="0.1062"
+                          diaginertia="0.0003 0.0003 0.0002"/>
+
+                <!-- ankle_roll_R -->
+                <body name="leg_right_ankle_roll"
+                      pos="0.030000 0.050000 -0.025000"
+                      quat="0.70711 0.0 0.70711 0.0">
+                  <joint name="leg_right_ankle_roll_joint" type="hinge"
+                         axis="0 0 1"
+                         range="-0.261799 0.261799"
+                         damping="0.01" armature="0.002"/>
+                  <!-- foot collision: box -->
+                  <geom name="rfoot_col" type="box" size="0.055 0.025 0.012"
+                        pos="0.02 0.023 -0.02" material="ankle"/>
+                  <inertial pos="0.000023 0.022661 0.019784"
+                            mass="0.7065"
+                            diaginertia="0.002 0.001 0.002"/>
+                </body><!-- ankle_roll_R -->
+
+              </body><!-- ankle_pitch_R -->
+            </body><!-- knee_R -->
+          </body><!-- hip_pitch_R -->
+        </body><!-- hip_yaw_R -->
+      </body><!-- hip_roll_R -->
+
+    </body><!-- base -->
+  </worldbody>
+
+  <!-- ── Actuator (motor 타입: ctrl = torque, PD는 외부에서 계산) ── -->
+  <!--
+    play_mujoco.py에서 PD 제어를 수동으로 계산:
+      torque = kp*(target_pos − q) − kd*qdot  clipped ±effort_limit
+    data.ctrl[i] = torque 값
+
+    IsaacLab kp=20, kd=2, effort_limit=6 Nm 기준
+    effort_limit를 올리려면 ctrlrange 수정 또는 --effort-limit 플래그 사용
+  -->
+  <actuator>
+    <!-- LEFT LEG -->
+    <motor name="leg_left_hip_roll_joint"   joint="leg_left_hip_roll_joint"   ctrlrange="-6 6"/>
+    <motor name="leg_left_hip_yaw_joint"    joint="leg_left_hip_yaw_joint"    ctrlrange="-6 6"/>
+    <motor name="leg_left_hip_pitch_joint"  joint="leg_left_hip_pitch_joint"  ctrlrange="-6 6"/>
+    <motor name="leg_left_knee_pitch_joint" joint="leg_left_knee_pitch_joint" ctrlrange="-6 6"/>
+    <motor name="leg_left_ankle_pitch_joint" joint="leg_left_ankle_pitch_joint" ctrlrange="-6 6"/>
+    <motor name="leg_left_ankle_roll_joint" joint="leg_left_ankle_roll_joint" ctrlrange="-6 6"/>
+    <!-- RIGHT LEG -->
+    <motor name="leg_right_hip_roll_joint"   joint="leg_right_hip_roll_joint"   ctrlrange="-6 6"/>
+    <motor name="leg_right_hip_yaw_joint"    joint="leg_right_hip_yaw_joint"    ctrlrange="-6 6"/>
+    <motor name="leg_right_hip_pitch_joint"  joint="leg_right_hip_pitch_joint"  ctrlrange="-6 6"/>
+    <motor name="leg_right_knee_pitch_joint" joint="leg_right_knee_pitch_joint" ctrlrange="-6 6"/>
+    <motor name="leg_right_ankle_pitch_joint" joint="leg_right_ankle_pitch_joint" ctrlrange="-6 6"/>
+    <motor name="leg_right_ankle_roll_joint" joint="leg_right_ankle_roll_joint" ctrlrange="-6 6"/>
+  </actuator>
+
+  <!-- ── Sensor ────────────────────────────────────────────────── -->
+  <sensor>
+    <!-- base_ang_vel: body frame angular velocity (obs [3:6]) -->
+    <gyro   name="imu_gyro"        site="imu_site"/>
+    <!-- projected_gravity 계산용 quaternion -->
+    <framequat name="imu_quat"     objtype="site" objname="imu_site"/>
+    <!-- base linear velocity (참고용, obs에는 미포함) -->
+    <velocimeter name="imu_linvel" site="imu_site"/>
+  </sensor>
+
+</mujoco>

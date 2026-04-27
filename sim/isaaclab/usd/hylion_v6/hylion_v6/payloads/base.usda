@@ -1,0 +1,1485 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "URDF USD Converter v0.1.0"
+    }
+    defaultPrim = "hylion"
+    doc = """Generated from Composed Stage of root layer /tmp/tmp5udvdz66/hylion.usdc
+
+
+Generated from Composed Stage of root layer /home/laba/project_singularity/δ3/usd/hylion_v6/usdex/hylion.usdc
+
+
+Generated from Composed Stage of root layer /home/laba/project_singularity/δ3/usd/hylion_v6/temp/hylion_v6.usd
+
+
+Generated from Composed Stage of root layer /home/laba/project_singularity/δ3/usd/hylion_v6/hylion_v6/payloads/base.usd
+"""
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    subLayers = [
+        @./robot.usda@
+    ]
+    upAxis = "Z"
+)
+
+def Xform "hylion" (
+    prepend apiSchemas = ["GeomModelAPI"]
+    assetInfo = {
+        string name = "hylion"
+    }
+    kind = "component"
+)
+{
+    float3[] extentsHint = [(-0.04, -0.12, 0.635), (0.04, 0.12, 0.785), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.084002584, -0.1325, 0.03999904), (0.13599862, 0.13250004, 0.825)]
+
+    def Scope "Materials"
+    {
+        def Material "base_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/base_parts_material>
+        )
+        {
+        }
+
+        def Material "imu_2_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/imu_2_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_left_hip_roll_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_hip_roll_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_left_hip_yaw_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_hip_yaw_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_left_hip_pitch_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_hip_pitch_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_left_knee_pitch_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_knee_pitch_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_left_ankle_pitch_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_ankle_pitch_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_left_ankle_roll_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_ankle_roll_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_right_hip_roll_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_hip_roll_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_right_hip_yaw_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_hip_yaw_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_right_hip_pitch_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_hip_pitch_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_right_knee_pitch_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_knee_pitch_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_right_ankle_pitch_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_ankle_pitch_parts_material>
+        )
+        {
+        }
+
+        def Material "leg_right_ankle_roll_parts_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/leg_left_ankle_roll_parts_material>
+        )
+        {
+        }
+
+        def Material "structure_material" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/structure_material>
+        )
+        {
+        }
+
+        def Material "soarm_3d_printed" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/soarm_3d_printed>
+        )
+        {
+        }
+
+        def Material "soarm_sts3215" (
+            instanceable = true
+            prepend references = @./materials.usda@</Materials/soarm_sts3215>
+        )
+        {
+        }
+    }
+
+    def Scope "Geometry"
+    {
+        def Xform "base"
+        {
+            def Xform "base_visual" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </hylion/Materials/base_parts_material>
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (-0.0030965, 0.000264765, 0.675059)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Xform "imu_2"
+            {
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.061722, -5.97549e-17, 0.68)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "imu_2_visual" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/imu_2_parts_material>
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 9.72026e-19, 0.0025)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "imu"
+                {
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, -6.33816e-19, 0.005)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Scope "origin"
+                    {
+                        custom string urdf:rpy = "0 -0 0"
+                        custom string urdf:xyz = "0 0 0"
+                    }
+                }
+            }
+
+            def Xform "leg_left_hip_roll"
+            {
+                quatf xformOp:orient = (0.92387956, 2.1963816e-15, 0.38268337, -4.805823e-15)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (-0.0290919, 0.08, 0.542631)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "leg_left_hip_roll_visual" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/leg_left_hip_roll_parts_material>
+                    quatf xformOp:orient = (0.92387956, 9.428655e-16, -0.38268337, 5.3375163e-15)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.00410941, -0.000112596, -0.0464623)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "leg_left_hip_yaw"
+                {
+                    quatf xformOp:orient = (0.49999815, -0.5, 0.50000185, -0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.027, 1.11022e-16, -0.052)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Xform "leg_left_hip_yaw_visual" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </hylion/Materials/leg_left_hip_yaw_parts_material>
+                        quatf xformOp:orient = (-0.27059764, -0.6532807, 0.65328234, -0.27059835)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.00411632, -0.0000863203, 0.0463382)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "leg_left_hip_pitch"
+                    {
+                        quatf xformOp:orient = (-0.65328044, -0.2705981, 0.65328246, 0.2705981)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.027, -5.55112e-17, 0.052)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                        def Xform "leg_left_hip_pitch_visual" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </hylion/Materials/leg_left_hip_pitch_parts_material>
+                            quatf xformOp:orient = (0.70710546, 0.7071081, -4.9228483e-15, 3.892148e-16)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0.0030405, 0.120388, 0.0210924)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "leg_left_knee_pitch"
+                        {
+                            quatf xformOp:orient = (-0.0000013267949, 0, 0, 1)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (4.09395e-16, 0.15, -0.018)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                            def Xform "leg_left_knee_pitch_visual" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </hylion/Materials/leg_left_knee_pitch_parts_material>
+                                quatf xformOp:orient = (9.38184e-7, 9.381874e-7, 0.7071081, 0.70710546)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0000414041, -0.112249, 0.0257397)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "leg_left_ankle_pitch"
+                            {
+                                quatf xformOp:orient = (-0.0000013267949, 0, 0, 1)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-2.42341e-15, -0.16, -0.003)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                def Xform "leg_left_ankle_pitch_visual" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    rel material:binding = </hylion/Materials/leg_left_ankle_pitch_parts_material>
+                                    quatf xformOp:orient = (0.70710546, 0.7071081, -7.5573906e-14, -7.30062e-14)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0.0131065, 0.0273743, 0.0274153)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "leg_left_ankle_roll"
+                                {
+                                    quatf xformOp:orient = (0.70710546, -2.4071179e-17, 0.7071081, 2.4071267e-17)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0.03, 0.05, 0.025)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                    def Xform "leg_left_ankle_roll_visual" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </hylion/Materials/leg_left_ankle_roll_parts_material>
+                                        quatf xformOp:orient = (0.49999815, 0.5, -0.5, 0.50000185)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (0.0000229341, 0.0226611, 0.0197836)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Cube "box" (
+                                        prepend apiSchemas = ["PhysicsCollisionAPI"]
+                                    )
+                                    {
+                                        float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                                        uniform token purpose = "guide"
+                                        double size = 1
+                                        quatf xformOp:orient = (0.70710546, 0.7071081, -8.018129e-14, 3.1449747e-14)
+                                        float3 xformOp:scale = (0.072, 0.22, 0.04)
+                                        double3 xformOp:translate = (1.45453e-14, 0.03, 0.006)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+                                }
+                            }
+
+                            def Cylinder "cylinder" (
+                                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                            )
+                            {
+                                uniform token axis = "Z"
+                                float3[] extent = [(-0.04, -0.04, -0.075), (0.04, 0.04, 0.075)]
+                                double height = 0.15
+                                uniform token purpose = "guide"
+                                double radius = 0.04
+                                quatf xformOp:orient = (0.49999815, -0.5, 0.5, 0.50000185)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-5.40778e-15, -0.115, 0.022)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+                        }
+
+                        def Cylinder "cylinder" (
+                            prepend apiSchemas = ["PhysicsCollisionAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            float3[] extent = [(-0.05, -0.05, -0.065), (0.05, 0.05, 0.065)]
+                            double height = 0.13
+                            uniform token purpose = "guide"
+                            double radius = 0.05
+                            quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0.00597627, 0.039, 0.0295)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+                    }
+                }
+            }
+
+            def Xform "leg_right_hip_roll"
+            {
+                quatf xformOp:orient = (0.0000012257987, 0.38268337, -5.077423e-7, 0.92387956)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (-0.0290919, -0.08, 0.542631)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "leg_right_hip_roll_visual" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/leg_right_hip_roll_parts_material>
+                    quatf xformOp:orient = (-0.0000012257987, 0.38268337, 5.077423e-7, 0.92387956)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.00410941, -0.00018505, -0.0464478)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "leg_right_hip_yaw"
+                {
+                    quatf xformOp:orient = (-0.49999815, 0.5, 0.50000185, -0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.027, 3.46945e-16, -0.052)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Xform "leg_right_hip_yaw_visual" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </hylion/Materials/leg_right_hip_yaw_parts_material>
+                        quatf xformOp:orient = (-0.27059937, -0.65327996, 0.65328306, -0.27059662)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.00411632, -0.000013851, 0.0463238)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "leg_right_hip_pitch"
+                    {
+                        quatf xformOp:orient = (-0.65328044, -0.2705981, 0.65328246, 0.2705981)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.027, -3.33067e-16, 0.052)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                        def Xform "leg_right_hip_pitch_visual" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </hylion/Materials/leg_right_hip_pitch_parts_material>
+                            quatf xformOp:orient = (0.70710546, 0.7071081, 2.6433336e-16, 6.973468e-16)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0.00319928, 0.120388, -0.0210924)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "leg_right_knee_pitch"
+                        {
+                            quatf xformOp:orient = (1, 0, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-2.77556e-17, 0.15, 0.018)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                            def Xform "leg_right_knee_pitch_visual" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </hylion/Materials/leg_right_knee_pitch_parts_material>
+                                quatf xformOp:orient = (0.70710546, 0.7071081, -4.583883e-16, 2.3425077e-15)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0000509429, 0.112249, -0.0257397)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "leg_right_ankle_pitch"
+                            {
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (1.37911e-15, 0.16, 0.003)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                def Xform "leg_right_ankle_pitch_visual" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    rel material:binding = </hylion/Materials/leg_right_ankle_pitch_parts_material>
+                                    quatf xformOp:orient = (0.70710546, 0.7071081, 2.876012e-14, 3.9126746e-14)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0.0131065, 0.0273743, -0.0274153)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "leg_right_ankle_roll"
+                                {
+                                    quatf xformOp:orient = (0.70710546, -2.4071179e-17, 0.7071081, 2.4071267e-17)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0.03, 0.05, -0.025)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                    def Xform "leg_right_ankle_roll_visual" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </hylion/Materials/leg_right_ankle_roll_parts_material>
+                                        quatf xformOp:orient = (0.49999815, 0.5, -0.5, 0.50000185)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (0.0000229341, 0.0226611, 0.0197836)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Cube "box" (
+                                        prepend apiSchemas = ["PhysicsCollisionAPI"]
+                                    )
+                                    {
+                                        float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                                        uniform token purpose = "guide"
+                                        double size = 1
+                                        quatf xformOp:orient = (0.70710546, 0.7071081, 1.11354726e-13, -2.4992852e-13)
+                                        float3 xformOp:scale = (0.072, 0.22, 0.04)
+                                        double3 xformOp:translate = (5.16957e-15, 0.03, 0.006)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+                                }
+                            }
+
+                            def Cylinder "cylinder" (
+                                prepend apiSchemas = ["PhysicsCollisionAPI"]
+                            )
+                            {
+                                uniform token axis = "Z"
+                                float3[] extent = [(-0.04, -0.04, -0.075), (0.04, 0.04, 0.075)]
+                                double height = 0.15
+                                uniform token purpose = "guide"
+                                double radius = 0.04
+                                quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (1.15304e-14, 0.115, -0.022)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+                        }
+
+                        def Cylinder "cylinder" (
+                            prepend apiSchemas = ["PhysicsCollisionAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            float3[] extent = [(-0.05, -0.05, -0.065), (0.05, 0.05, 0.065)]
+                            double height = 0.13
+                            uniform token purpose = "guide"
+                            double radius = 0.05
+                            quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0.00597627, 0.039, -0.0295)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+                    }
+                }
+            }
+
+            def Xform "structure_left"
+            {
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0, 0.095, 0.71)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Cube "box" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hylion/Materials/structure_material>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.08, 0.05, 0.15)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_1" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.08, 0.05, 0.15)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def Xform "structure_right"
+            {
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0, -0.095, 0.71)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Cube "box" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    rel material:binding = </hylion/Materials/structure_material>
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.08, 0.05, 0.15)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Cube "box_1" (
+                    prepend apiSchemas = ["PhysicsCollisionAPI"]
+                    displayName = "box"
+                )
+                {
+                    float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                    uniform token purpose = "guide"
+                    double size = 1
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (0.08, 0.05, 0.15)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def Xform "soarm_left_base_link"
+            {
+                quatf xformOp:orient = (-0.49999815, 0.50000185, -0.5, -0.5)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0, 0.12, 0.71)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "base_motor_holder_so101_v1" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/soarm_3d_printed>
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.00636471, -0.0000994414, -0.0024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "base_so101_v2" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/soarm_3d_printed>
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.00636471, -8.97657e-9, -0.0024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "sts3215_03a_v1" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/soarm_sts3215>
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.0263353, -8.97657e-9, 0.0437)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "waveshare_mounting_plate_so101_v2" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/soarm_3d_printed>
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.0309827, -0.000199441, 0.0474)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "soarm_left_shoulder_link"
+                {
+                    quatf xformOp:orient = (-1.7605304e-12, -0.0000013267949, 1, 0.0000013267949)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.0388353, -8.97657e-9, 0.0624)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Xform "sts3215_03a_v1" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </hylion/Materials/soarm_sts3215>
+                        quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0303992, 0.000422241, -0.0417)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "motor_holder_so101_base_v1" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </hylion/Materials/soarm_3d_printed>
+                        quatf xformOp:orient = (0.49999815, 0.5, -0.5, 0.50000185)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0675992, -0.000177759, 0.0158499)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "rotation_pitch_so101_v1" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </hylion/Materials/soarm_3d_printed>
+                        quatf xformOp:orient = (-0.70710546, 0.7071081, -8.316303e-34, -8.316333e-34)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.0122008, 0.0000222413, 0.0464)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "soarm_left_upper_arm_link"
+                    {
+                        quatf xformOp:orient = (-0.70710546, 0.7071081, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0303992, -0.0182778, -0.0542)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                        def Xform "sts3215_03a_v1" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </hylion/Materials/soarm_sts3215>
+                            quatf xformOp:orient = (9.38184e-7, -0.70710546, 0.7071081, -9.381874e-7)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.11257, -0.0155, 0.0187)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "upper_arm_so101_v1" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </hylion/Materials/soarm_3d_printed>
+                            quatf xformOp:orient = (0.0000013267949, 1, 4.6536186e-23, -2.6371999e-23)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.065085, 0.012, 0.0182)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "soarm_left_lower_arm_link"
+                        {
+                            quatf xformOp:orient = (1, 0, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.11257, -0.028, 1.73763e-16)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                            def Xform "under_arm_so101_v1" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                quatf xformOp:orient = (0.0000013267949, 1, 4.653619e-23, -2.6371999e-23)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0648499, -0.032, 0.0182)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "motor_holder_so101_wrist_v1" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                quatf xformOp:orient = (-0.0000013267949, 1, 1.6474557e-21, 1.276755e-15)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0648499, -0.032, 0.018)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "sts3215_03a_v1" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </hylion/Materials/soarm_sts3215>
+                                quatf xformOp:orient = (1.7604309e-12, -0.0000013267949, 1, -0.0000013267949)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.1224, 0.0052, 0.0187)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "soarm_left_wrist_link"
+                            {
+                                quatf xformOp:orient = (-0.70710546, 0, 0, 0.7071081)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.1349, 0.0052, 3.62355e-17)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                def Xform "sts3215_03a_no_horn_v1" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    rel material:binding = </hylion/Materials/soarm_sts3215>
+                                    quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (8.32667e-17, -0.0424, 0.0306)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "wrist_roll_pitch_so101_v2" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                    quatf xformOp:orient = (-0.49999815, 0.5, 0.5, 0.50000185)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, -0.028, 0.0181)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "soarm_left_gripper_link"
+                                {
+                                    quatf xformOp:orient = (0.017210072, -0.017208133, 0.7068986, 0.706896)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (5.55112e-17, -0.0611, 0.0181)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                    def Xform "sts3215_03a_v1" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </hylion/Materials/soarm_sts3215>
+                                        quatf xformOp:orient = (-0.70710546, 0.7071081, -4.0522698e-17, 7.723398e-17)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (0.0077, 0.0001, -0.0234)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Xform "wrist_roll_follower_so101_v1" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                        quatf xformOp:orient = (-0.0000013267949, 1, -9.710268e-24, 2.7755625e-17)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (8.32667e-17, -0.000218214, 0.000949706)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Xform "soarm_left_moving_jaw_link"
+                                    {
+                                        quatf xformOp:orient = (0.70710546, 0.7071081, -1.8536205e-8, 1.8536273e-8)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (0.0202, 0.0188, -0.0234)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                        def Xform "moving_jaw_so101_v1" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                            float3 xformOp:scale = (1, 1, 1)
+                                            double3 xformOp:translate = (-5.55112e-17, -5.55112e-17, 0.0189)
+                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                        }
+
+                                        def Xform "moving_jaw_so101_v1_1" (
+                                            displayName = "moving_jaw_so101_v1"
+                                        )
+                                        {
+                                            uniform token purpose = "guide"
+                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                            float3 xformOp:scale = (1, 1, 1)
+                                            double3 xformOp:translate = (-5.55112e-17, -5.55112e-17, 0.0189)
+                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                        }
+                                    }
+
+                                    def Xform "sts3215_03a_v1_1" (
+                                        displayName = "sts3215_03a_v1"
+                                    )
+                                    {
+                                        uniform token purpose = "guide"
+                                        quatf xformOp:orient = (-0.70710546, 0.7071081, -4.0522698e-17, 7.723398e-17)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (0.0077, 0.0001, -0.0234)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Xform "wrist_roll_follower_so101_v1_1" (
+                                        displayName = "wrist_roll_follower_so101_v1"
+                                    )
+                                    {
+                                        uniform token purpose = "guide"
+                                        quatf xformOp:orient = (-0.0000013267949, 1, -9.710268e-24, 2.7755625e-17)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (8.32667e-17, -0.000218214, 0.000949706)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Xform "soarm_left_gripper_frame_link"
+                                    {
+                                        quatf xformOp:orient = (0.0000013267949, 0, 1, 0)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (-0.0079, -0.000218121, -0.0981274)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+                                }
+
+                                def Xform "sts3215_03a_no_horn_v1_1" (
+                                    displayName = "sts3215_03a_no_horn_v1"
+                                )
+                                {
+                                    uniform token purpose = "guide"
+                                    quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (8.32667e-17, -0.0424, 0.0306)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "wrist_roll_pitch_so101_v2_1" (
+                                    displayName = "wrist_roll_pitch_so101_v2"
+                                )
+                                {
+                                    uniform token purpose = "guide"
+                                    quatf xformOp:orient = (-0.49999815, 0.5, 0.5, 0.50000185)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, -0.028, 0.0181)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+                            }
+
+                            def Xform "under_arm_so101_v1_1" (
+                                displayName = "under_arm_so101_v1"
+                            )
+                            {
+                                uniform token purpose = "guide"
+                                quatf xformOp:orient = (0.0000013267949, 1, 4.653619e-23, -2.6371999e-23)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0648499, -0.032, 0.0182)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "motor_holder_so101_wrist_v1_1" (
+                                displayName = "motor_holder_so101_wrist_v1"
+                            )
+                            {
+                                uniform token purpose = "guide"
+                                quatf xformOp:orient = (-0.0000013267949, 1, 1.6474557e-21, 1.276755e-15)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0648499, -0.032, 0.018)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "sts3215_03a_v1_1" (
+                                displayName = "sts3215_03a_v1"
+                            )
+                            {
+                                uniform token purpose = "guide"
+                                quatf xformOp:orient = (1.7604309e-12, -0.0000013267949, 1, -0.0000013267949)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.1224, 0.0052, 0.0187)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+                        }
+
+                        def Xform "sts3215_03a_v1_1" (
+                            displayName = "sts3215_03a_v1"
+                        )
+                        {
+                            uniform token purpose = "guide"
+                            quatf xformOp:orient = (9.38184e-7, -0.70710546, 0.7071081, -9.381874e-7)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.11257, -0.0155, 0.0187)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "upper_arm_so101_v1_1" (
+                            displayName = "upper_arm_so101_v1"
+                        )
+                        {
+                            uniform token purpose = "guide"
+                            quatf xformOp:orient = (0.0000013267949, 1, 4.6536186e-23, -2.6371999e-23)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.065085, 0.012, 0.0182)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+                    }
+
+                    def Xform "sts3215_03a_v1_1" (
+                        displayName = "sts3215_03a_v1"
+                    )
+                    {
+                        uniform token purpose = "guide"
+                        quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0303992, 0.000422241, -0.0417)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "motor_holder_so101_base_v1_1" (
+                        displayName = "motor_holder_so101_base_v1"
+                    )
+                    {
+                        uniform token purpose = "guide"
+                        quatf xformOp:orient = (0.49999815, 0.5, -0.5, 0.50000185)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0675992, -0.000177759, 0.0158499)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "rotation_pitch_so101_v1_1" (
+                        displayName = "rotation_pitch_so101_v1"
+                    )
+                    {
+                        uniform token purpose = "guide"
+                        quatf xformOp:orient = (-0.70710546, 0.7071081, -8.316303e-34, -8.316333e-34)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.0122008, 0.0000222413, 0.0464)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+
+                def Xform "base_motor_holder_so101_v1_1" (
+                    displayName = "base_motor_holder_so101_v1"
+                )
+                {
+                    uniform token purpose = "guide"
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.00636471, -0.0000994414, -0.0024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "base_so101_v2_1" (
+                    displayName = "base_so101_v2"
+                )
+                {
+                    uniform token purpose = "guide"
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.00636471, -8.97657e-9, -0.0024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "sts3215_03a_v1_1" (
+                    displayName = "sts3215_03a_v1"
+                )
+                {
+                    uniform token purpose = "guide"
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.0263353, -8.97657e-9, 0.0437)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "waveshare_mounting_plate_so101_v2_1" (
+                    displayName = "waveshare_mounting_plate_so101_v2"
+                )
+                {
+                    uniform token purpose = "guide"
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.0309827, -0.000199441, 0.0474)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def Xform "soarm_right_base_link"
+            {
+                quatf xformOp:orient = (0.49999815, 0.50000185, 0.5, -0.5)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0, -0.12, 0.71)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "base_motor_holder_so101_v1" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/soarm_3d_printed>
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.00636471, -0.0000994414, -0.0024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "base_so101_v2" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/soarm_3d_printed>
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.00636471, -8.97657e-9, -0.0024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "sts3215_03a_v1" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/soarm_sts3215>
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.0263353, -8.97657e-9, 0.0437)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "waveshare_mounting_plate_so101_v2" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </hylion/Materials/soarm_3d_printed>
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.0309827, -0.000199441, 0.0474)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "soarm_right_shoulder_link"
+                {
+                    quatf xformOp:orient = (-1.7605304e-12, -0.0000013267949, 1, 0.0000013267949)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.0388353, -8.97657e-9, 0.0624)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Xform "sts3215_03a_v1" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </hylion/Materials/soarm_sts3215>
+                        quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0303992, 0.000422241, -0.0417)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "motor_holder_so101_base_v1" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </hylion/Materials/soarm_3d_printed>
+                        quatf xformOp:orient = (0.49999815, 0.5, -0.5, 0.50000185)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0675992, -0.000177759, 0.0158499)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "rotation_pitch_so101_v1" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding = </hylion/Materials/soarm_3d_printed>
+                        quatf xformOp:orient = (-0.70710546, 0.7071081, -8.316303e-34, -8.316333e-34)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.0122008, 0.0000222413, 0.0464)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "soarm_right_upper_arm_link"
+                    {
+                        quatf xformOp:orient = (-0.70710546, 0.7071081, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0303992, -0.0182778, -0.0542)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                        def Xform "sts3215_03a_v1" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </hylion/Materials/soarm_sts3215>
+                            quatf xformOp:orient = (9.38184e-7, -0.70710546, 0.7071081, -9.381874e-7)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.11257, -0.0155, 0.0187)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "upper_arm_so101_v1" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </hylion/Materials/soarm_3d_printed>
+                            quatf xformOp:orient = (0.0000013267949, 1, 4.6536186e-23, -2.6371999e-23)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.065085, 0.012, 0.0182)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "soarm_right_lower_arm_link"
+                        {
+                            quatf xformOp:orient = (1, 0, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.11257, -0.028, 1.73763e-16)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                            def Xform "under_arm_so101_v1" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                quatf xformOp:orient = (0.0000013267949, 1, 4.653619e-23, -2.6371999e-23)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0648499, -0.032, 0.0182)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "motor_holder_so101_wrist_v1" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                quatf xformOp:orient = (-0.0000013267949, 1, 1.6474557e-21, 1.276755e-15)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0648499, -0.032, 0.018)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "sts3215_03a_v1" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </hylion/Materials/soarm_sts3215>
+                                quatf xformOp:orient = (1.7604309e-12, -0.0000013267949, 1, -0.0000013267949)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.1224, 0.0052, 0.0187)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "soarm_right_wrist_link"
+                            {
+                                quatf xformOp:orient = (-0.70710546, 0, 0, 0.7071081)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.1349, 0.0052, 3.62355e-17)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                def Xform "sts3215_03a_no_horn_v1" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    rel material:binding = </hylion/Materials/soarm_sts3215>
+                                    quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (8.32667e-17, -0.0424, 0.0306)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "wrist_roll_pitch_so101_v2" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                    quatf xformOp:orient = (-0.49999815, 0.5, 0.5, 0.50000185)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, -0.028, 0.0181)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "soarm_right_gripper_link"
+                                {
+                                    quatf xformOp:orient = (0.017210072, -0.017208133, 0.7068986, 0.706896)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (5.55112e-17, -0.0611, 0.0181)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                    def Xform "sts3215_03a_v1" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </hylion/Materials/soarm_sts3215>
+                                        quatf xformOp:orient = (-0.70710546, 0.7071081, -4.0522698e-17, 7.723398e-17)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (0.0077, 0.0001, -0.0234)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Xform "wrist_roll_follower_so101_v1" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                        quatf xformOp:orient = (-0.0000013267949, 1, -9.710268e-24, 2.7755625e-17)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (8.32667e-17, -0.000218214, 0.000949706)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Xform "soarm_right_moving_jaw_link"
+                                    {
+                                        quatf xformOp:orient = (0.70710546, 0.7071081, -1.8536205e-8, 1.8536273e-8)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (0.0202, 0.0188, -0.0234)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                        def Xform "moving_jaw_so101_v1" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </hylion/Materials/soarm_3d_printed>
+                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                            float3 xformOp:scale = (1, 1, 1)
+                                            double3 xformOp:translate = (-5.55112e-17, -5.55112e-17, 0.0189)
+                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                        }
+
+                                        def Xform "moving_jaw_so101_v1_1" (
+                                            displayName = "moving_jaw_so101_v1"
+                                        )
+                                        {
+                                            uniform token purpose = "guide"
+                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                            float3 xformOp:scale = (1, 1, 1)
+                                            double3 xformOp:translate = (-5.55112e-17, -5.55112e-17, 0.0189)
+                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                        }
+                                    }
+
+                                    def Xform "sts3215_03a_v1_1" (
+                                        displayName = "sts3215_03a_v1"
+                                    )
+                                    {
+                                        uniform token purpose = "guide"
+                                        quatf xformOp:orient = (-0.70710546, 0.7071081, -4.0522698e-17, 7.723398e-17)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (0.0077, 0.0001, -0.0234)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Xform "wrist_roll_follower_so101_v1_1" (
+                                        displayName = "wrist_roll_follower_so101_v1"
+                                    )
+                                    {
+                                        uniform token purpose = "guide"
+                                        quatf xformOp:orient = (-0.0000013267949, 1, -9.710268e-24, 2.7755625e-17)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (8.32667e-17, -0.000218214, 0.000949706)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+
+                                    def Xform "soarm_right_gripper_frame_link"
+                                    {
+                                        quatf xformOp:orient = (0.0000013267949, 0, 1, 0)
+                                        float3 xformOp:scale = (1, 1, 1)
+                                        double3 xformOp:translate = (-0.0079, -0.000218121, -0.0981274)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                    }
+                                }
+
+                                def Xform "sts3215_03a_no_horn_v1_1" (
+                                    displayName = "sts3215_03a_no_horn_v1"
+                                )
+                                {
+                                    uniform token purpose = "guide"
+                                    quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (8.32667e-17, -0.0424, 0.0306)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "wrist_roll_pitch_so101_v2_1" (
+                                    displayName = "wrist_roll_pitch_so101_v2"
+                                )
+                                {
+                                    uniform token purpose = "guide"
+                                    quatf xformOp:orient = (-0.49999815, 0.5, 0.5, 0.50000185)
+                                    float3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, -0.028, 0.0181)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+                            }
+
+                            def Xform "under_arm_so101_v1_1" (
+                                displayName = "under_arm_so101_v1"
+                            )
+                            {
+                                uniform token purpose = "guide"
+                                quatf xformOp:orient = (0.0000013267949, 1, 4.653619e-23, -2.6371999e-23)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0648499, -0.032, 0.0182)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "motor_holder_so101_wrist_v1_1" (
+                                displayName = "motor_holder_so101_wrist_v1"
+                            )
+                            {
+                                uniform token purpose = "guide"
+                                quatf xformOp:orient = (-0.0000013267949, 1, 1.6474557e-21, 1.276755e-15)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0648499, -0.032, 0.018)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "sts3215_03a_v1_1" (
+                                displayName = "sts3215_03a_v1"
+                            )
+                            {
+                                uniform token purpose = "guide"
+                                quatf xformOp:orient = (1.7604309e-12, -0.0000013267949, 1, -0.0000013267949)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.1224, 0.0052, 0.0187)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+                        }
+
+                        def Xform "sts3215_03a_v1_1" (
+                            displayName = "sts3215_03a_v1"
+                        )
+                        {
+                            uniform token purpose = "guide"
+                            quatf xformOp:orient = (9.38184e-7, -0.70710546, 0.7071081, -9.381874e-7)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.11257, -0.0155, 0.0187)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "upper_arm_so101_v1_1" (
+                            displayName = "upper_arm_so101_v1"
+                        )
+                        {
+                            uniform token purpose = "guide"
+                            quatf xformOp:orient = (0.0000013267949, 1, 4.6536186e-23, -2.6371999e-23)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.065085, 0.012, 0.0182)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+                    }
+
+                    def Xform "sts3215_03a_v1_1" (
+                        displayName = "sts3215_03a_v1"
+                    )
+                    {
+                        uniform token purpose = "guide"
+                        quatf xformOp:orient = (-0.49999815, -0.5, -0.5, 0.50000185)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0303992, 0.000422241, -0.0417)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "motor_holder_so101_base_v1_1" (
+                        displayName = "motor_holder_so101_base_v1"
+                    )
+                    {
+                        uniform token purpose = "guide"
+                        quatf xformOp:orient = (0.49999815, 0.5, -0.5, 0.50000185)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0675992, -0.000177759, 0.0158499)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "rotation_pitch_so101_v1_1" (
+                        displayName = "rotation_pitch_so101_v1"
+                    )
+                    {
+                        uniform token purpose = "guide"
+                        quatf xformOp:orient = (-0.70710546, 0.7071081, -8.316303e-34, -8.316333e-34)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.0122008, 0.0000222413, 0.0464)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+
+                def Xform "base_motor_holder_so101_v1_1" (
+                    displayName = "base_motor_holder_so101_v1"
+                )
+                {
+                    uniform token purpose = "guide"
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.00636471, -0.0000994414, -0.0024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "base_so101_v2_1" (
+                    displayName = "base_so101_v2"
+                )
+                {
+                    uniform token purpose = "guide"
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.00636471, -8.97657e-9, -0.0024)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "sts3215_03a_v1_1" (
+                    displayName = "sts3215_03a_v1"
+                )
+                {
+                    uniform token purpose = "guide"
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.0263353, -8.97657e-9, 0.0437)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "waveshare_mounting_plate_so101_v2_1" (
+                    displayName = "waveshare_mounting_plate_so101_v2"
+                )
+                {
+                    uniform token purpose = "guide"
+                    quatf xformOp:orient = (0.49999815, 0.5, 0.50000185, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (-0.0309827, -0.000199441, 0.0474)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+            }
+
+            def Cube "box" (
+                prepend apiSchemas = ["PhysicsCollisionAPI"]
+            )
+            {
+                float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+                uniform token purpose = "guide"
+                double size = 1
+                quatf xformOp:orient = (-0.70710546, 0, 0, 0.7071081)
+                float3 xformOp:scale = (0.15, 0.14, 0.23)
+                double3 xformOp:translate = (-6.93889e-18, 7.53521e-18, 0.71)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    def Scope "Physics"
+    {
+    }
+}
+
