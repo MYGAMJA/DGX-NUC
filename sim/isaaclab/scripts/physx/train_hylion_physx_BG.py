@@ -7,7 +7,7 @@ gym task: Velocity-Hylion-BG-v0 (hylion_v6 USD 사용)
   cd /home/laba/Berkeley-Humanoid-Lite/scripts/rsl_rl
   source /home/laba/env_isaaclab/bin/activate
   PYTHONUNBUFFERED=1 LD_PRELOAD="/lib/aarch64-linux-gnu/libgomp.so.1" \\
-    python /home/laba/project_singularity/δ3/scripts/train_hylion_physx_BG.py \\
+    python /home/laba/DGX-NUC/sim/isaaclab/scripts/physx/train_hylion_physx_BG.py \\
       --task Velocity-Hylion-BG-v0 \\
       --num_envs 4096 \\
       --headless \\
@@ -20,7 +20,7 @@ import argparse
 import os
 import sys
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 
 sys.path.insert(0, "/home/laba/Berkeley-Humanoid-Lite/scripts/rsl_rl")
 

@@ -23,9 +23,10 @@ set -euo pipefail
 
 # ── 경로 설정 ─────────────────────────────────────────────────────────────────
 BHL_DIR="/home/laba/Berkeley-Humanoid-Lite/scripts/rsl_rl"
-TRAIN_SCRIPT="/home/laba/project_singularity/δ3/scripts/train_hylion_physx_BG.py"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+TRAIN_SCRIPT="${REPO_ROOT}/sim/isaaclab/scripts/physx/train_hylion_physx_BG.py"
 PYTHON_BIN="/home/laba/env_isaaclab/bin/python"
-CKPT_DIR="/home/laba/project_singularity/δ3/checkpoints"
+CKPT_DIR="${REPO_ROOT}/checkpoints/biped"
 LOG_DIR="/tmp"
 
 # ── 시작 스테이지 (기본: D1) ──────────────────────────────────────────────────

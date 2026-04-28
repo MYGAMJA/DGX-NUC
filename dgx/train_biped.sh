@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# train_biped.sh  — Stage D3 재도전 (±3N)
+# train_biped.sh  — Stage D3 재도전 (±3N) — Newton 백엔드
 #
 # 상황: D3 best.pt가 NaN으로 오염됨 (2026-04-27 확인)
 #       → D2.5 (±2.5N, 마지막 정상 체크포인트)에서 재시작
@@ -8,12 +8,13 @@
 # 주요 변경점 (NaN 방지):
 #   - D3 PPO config: num_learning_epochs 3 → 2 (rsl_rl_ppo_cfg_stageD_optionA.py 수정됨)
 #   - resume: stage_d2_5_hylion_v6/best.pt
+#   - 물리 백엔드: PhysX CPU → Newton GPU (DGX Spark aarch64 필수)
 #
 # 사용법:
 #   bash /home/laba/DGX-NUC/dgx/train_biped.sh
 #
 # 로그 확인:
-#   tail -f /tmp/hylion_stageD3_retry.log
+#   tail -f /tmp/hylion_stageD3_newton.log
 #
 # 500 iter 조기 판단 기준 (실패 시 즉시 Ctrl+C):
 #   orientation termination > 30%  AND  mean_reward < 10 (하락 중)
@@ -24,12 +25,12 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"   # /home/laba/DGX-NUC
 BHL_DIR="/home/laba/Berkeley-Humanoid-Lite/scripts/rsl_rl"
-TRAIN_SCRIPT="$REPO_ROOT/sim/isaaclab/scripts/train_hylion_physx_BG.py"
+TRAIN_SCRIPT="$REPO_ROOT/sim/isaaclab/scripts/newton/train_hylion_newton_BG.py"
 PYTHON_BIN="/home/laba/env_isaaclab/bin/python"
 
 RESUME_CKPT="$REPO_ROOT/checkpoints/biped/stage_d2_5_hylion_v6/best.pt"
 OUT_DIR="$REPO_ROOT/checkpoints/biped/stage_d3_hylion_v6"
-LOG="/tmp/hylion_stageD3_retry.log"
+LOG="/tmp/hylion_stageD3_newton.log"
 
 if [[ ! -f "$RESUME_CKPT" ]]; then
     echo "[ERROR] D2.5 체크포인트 없음: $RESUME_CKPT"
@@ -38,7 +39,7 @@ fi
 
 mkdir -p "$OUT_DIR"
 
-echo "[INFO] Stage D3 재도전 (±3N) — D2.5에서 resume"
+echo "[INFO] Stage D3 재도전 (±3N) — Newton 백엔드, D2.5에서 resume"
 echo "[INFO] Resume: $RESUME_CKPT"
 echo "[INFO] 로그:   tail -f $LOG"
 echo "[INFO] 500 iter 후 orientation < 15%, reward > 20 확인 필요"
@@ -64,7 +65,8 @@ PYTHONUNBUFFERED=1 LD_PRELOAD="/lib/aarch64-linux-gnu/libgomp.so.1" \
     2>&1 | tee "$LOG"
 
 # 완료 후 best.pt 저장
-PROJ_LOGS="/home/laba/project_singularity/logs/rsl_rl/hylion"
+# Newton 스크립트는 BHL_DIR 기준 logs/ 에 저장됨
+PROJ_LOGS="${BHL_DIR}/logs/rsl_rl/hylion"
 LATEST_DIR=$(ls -dt "${PROJ_LOGS}"/2026-*/ 2>/dev/null | head -1)
 LATEST_PT=$(ls "${LATEST_DIR}"model_*.pt 2>/dev/null | sort -V | tail -1)
 
