@@ -1,0 +1,319 @@
+<!-- ============================================================
+  Hylion v7  —  BHL biped 기반 + SO-ARM 팔 질량 추가
+  IsaacLab policy sim-to-sim 검증용
+
+  BHL biped와 동일한 kinematics / collision geometry 사용.
+  hylion_v6.xml에서 cylinder geom 부재로 contact dynamics 차이 발생 →
+  BHL biped MJCF를 직접 베이스로 사용해 해결.
+
+  변경 사항 (BHL biped 대비):
+    - compiler angle="radian" 추가 (BHL 원본과 동일, joint range 라디안 해석 필수!)
+    - base inertial mass: 3.16 → 4.83 kg (Hylion 학습 기준)
+    - soarm_left / soarm_right 추가 (mass=3.44 × 2 = 6.88 kg)
+    - 총 질량: 19.89 kg (학습 목표 정확히 일치, play_mujoco.py 보정 0)
+    - physics options: timestep=0.005 (play_mujoco.py에서 덮어씀)
+    - mesh 경로: 절대경로 사용
+
+  obs 45-dim / action 12-dim 구성은 hylion_v6.xml과 동일.
+============================================================ -->
+
+<mujoco model="hylion_v7">
+
+  <!-- BHL biped 원본과 동일: 모든 각도를 라디안으로 해석 -->
+  <compiler angle="radian" autolimits="true"/>
+
+  <!-- ── 시뮬레이션 옵션 ──────────────────────────────────────── -->
+  <option
+    timestep="0.005"
+    gravity="0 0 -9.81"
+    integrator="implicitfast"
+  />
+
+  <!-- ── BHL biped default class ───────────────────────────────── -->
+  <default>
+    <default class="berkeley-humanoid-lite">
+      <joint frictionloss="0.1" armature="0.005"/>
+      <default class="visual">
+        <geom type="mesh" contype="0" conaffinity="0" group="2"/>
+      </default>
+      <default class="collision">
+        <geom group="3"/>
+      </default>
+    </default>
+    <!-- 지면: contype=0 conaffinity=1 → 로봇하고만 충돌 -->
+    <geom friction="0.8 0.1 0.1"/>
+  </default>
+
+  <!-- ── 자산: BHL biped 메시 절대경로 ──────────────────────────── -->
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.4 0.6 0.8" rgb2="0 0 0" width="512" height="512"/>
+    <texture name="texplane" type="2d" builtin="checker"
+             rgb1="0.2 0.2 0.2" rgb2="0.3 0.3 0.3" width="512" height="512"/>
+    <material name="matplane" texture="texplane" texrepeat="4 4" reflectance="0.2"/>
+
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/base_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/imu_2_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_left_hip_roll_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_left_hip_yaw_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_left_hip_pitch_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_left_knee_pitch_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_left_ankle_pitch_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_left_ankle_roll_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_right_hip_roll_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_right_hip_yaw_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_right_hip_pitch_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_right_knee_pitch_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_right_ankle_pitch_visual.stl"/>
+    <mesh file="/home/laba/Berkeley-Humanoid-Lite/source/berkeley_humanoid_lite_assets/data/robots/berkeley_humanoid/berkeley_humanoid_lite/mjcf/assets/leg_right_ankle_roll_visual.stl"/>
+
+    <!-- 시각화 materials -->
+    <material name="base_visual_material" rgba="0.67254 0.67254 0.67254 1"/>
+    <material name="imu_2_visual_material" rgba="0.8 0.8 0.8 1"/>
+    <material name="leg_left_hip_roll_visual_material" rgba="0.559597 0.559597 0.559597 1"/>
+    <material name="leg_left_hip_yaw_visual_material" rgba="0.559547 0.559547 0.559547 1"/>
+    <material name="leg_left_hip_pitch_visual_material" rgba="0.587522 0.587522 0.587522 1"/>
+    <material name="leg_left_knee_pitch_visual_material" rgba="0.644721 0.644721 0.644721 1"/>
+    <material name="leg_left_ankle_pitch_visual_material" rgba="0.743029 0.743029 0.743029 1"/>
+    <material name="leg_left_ankle_roll_visual_material" rgba="0.664849 0.664849 0.664849 1"/>
+    <material name="leg_right_hip_roll_visual_material" rgba="0.559597 0.559597 0.559597 1"/>
+    <material name="leg_right_hip_yaw_visual_material" rgba="0.559547 0.559547 0.559547 1"/>
+    <material name="leg_right_hip_pitch_visual_material" rgba="0.587522 0.587522 0.587522 1"/>
+    <material name="leg_right_knee_pitch_visual_material" rgba="0.644721 0.644721 0.644721 1"/>
+    <material name="leg_right_ankle_pitch_visual_material" rgba="0.743029 0.743029 0.743029 1"/>
+    <material name="leg_right_ankle_roll_visual_material" rgba="0.664849 0.664849 0.664849 1"/>
+    <material name="soarm_material" rgba="0.4 0.6 0.4 0.7"/>
+  </asset>
+
+  <!-- ── 월드 ────────────────────────────────────────────────── -->
+  <worldbody>
+    <light pos="0 0 1.5" dir="0 0 -1" directional="true"/>
+    <geom name="floor" size="0 0 0.05" type="plane"
+          contype="0" conaffinity="1" friction="0.8 0.1 0.1"
+          material="matplane"/>
+
+    <!-- ── BASE ─────────────────────────────────────────────── -->
+    <body name="base" pos="0 0 0" quat="1 0 0 0" childclass="berkeley-humanoid-lite">
+      <freejoint name="base_freejoint"/>
+
+      <!-- base inertial: Hylion 학습 질량(4.83 kg), BHL CoM 위치 유지 -->
+      <inertial pos="-0.00461671 0.000372279 0.637874"
+                mass="4.83"
+                fullinertia="0.0569 0.0432 0.0270 -6.2e-6 -0.00110 -2.3e-5"/>
+
+      <!-- IMU 센서 부착점 (BHL biped 기준) -->
+      <body name="imu_2" pos="0.061722 0 0.68" quat="1 0 0 0">
+        <inertial pos="0 0 0.0025" mass="0.00197704"
+                  fullinertia="1.11441e-07 4.06118e-08 1.43815e-07 0 0 0"/>
+        <geom type="mesh" class="visual" pos="0 0 0.0025" quat="1 0 0 0"
+              mesh="imu_2_visual" material="imu_2_visual_material"/>
+        <site group="3" name="imu" pos="0 0 0.005" quat="1 0 0 0"/>
+      </body>
+
+      <!-- base visual mesh -->
+      <geom type="mesh" class="visual"
+            pos="-0.00461671 0.000372279 0.637874" quat="1 0 0 0"
+            mesh="base_visual" material="base_visual_material"/>
+      <!-- base collision box -->
+      <geom class="collision"
+            pos="0 0 0.71" quat="0.707107 0 0 -0.707107"
+            type="box" size="0.075 0.07 0.115"/>
+
+      <!-- ── SO-ARM 팔 (static, 관절 없음, 질량만) ──────────── -->
+      <!-- Hylion 학습: SO-ARM101 × 2 = 6.88 kg, y=±0.12m 부착 -->
+      <body name="soarm_left" pos="0.0 0.12 0.75">
+        <inertial pos="0 0 -0.1" mass="3.44" diaginertia="0.025 0.025 0.005"/>
+        <geom type="sphere" size="0.04" contype="0" conaffinity="0"
+              material="soarm_material"/>
+      </body>
+      <body name="soarm_right" pos="0.0 -0.12 0.75">
+        <inertial pos="0 0 -0.1" mass="3.44" diaginertia="0.025 0.025 0.005"/>
+        <geom type="sphere" size="0.04" contype="0" conaffinity="0"
+              material="soarm_material"/>
+      </body>
+
+      <!-- ── LEFT LEG (BHL biped 완전 동일) ───────────────────── -->
+      <body name="leg_left_hip_roll" pos="-0.0290919 0.08 0.542631"
+            quat="0.92388 0 0.382683 0">
+        <joint axis="0 0 1" name="leg_left_hip_roll_joint" type="hinge"
+               range="-0.17453292519942673 1.5707963267949028"/>
+        <inertial pos="-0.00410941 -0.000112596 -0.0464623" mass="0.83786"
+                  fullinertia="0.000979918 0.000896043 0.000727678 6.45954e-06 -1.63173e-05 -5.43389e-06"/>
+        <geom type="mesh" class="visual"
+              pos="-0.00410941 -0.000112596 -0.0464623"
+              quat="0.92388 0 -0.382683 0"
+              mesh="leg_left_hip_roll_visual" material="leg_left_hip_roll_visual_material"/>
+
+        <body name="leg_left_hip_yaw" pos="0.027 0 -0.052" quat="0.5 -0.5 0.5 -0.5">
+          <joint axis="0 0 1" name="leg_left_hip_yaw_joint" type="hinge"
+                 range="-0.9817477042468095 0.5890486225480871"/>
+          <inertial pos="-0.00411632 -8.63203e-05 0.0463382" mass="0.837683"
+                    fullinertia="0.000979031 0.000898166 0.000724287 -1.13217e-06 1.96352e-05 -5.91541e-06"/>
+          <geom type="mesh" class="visual"
+                pos="-0.00411632 -8.63203e-05 0.0463382"
+                quat="0.270598 0.653281 -0.653281 0.270598"
+                mesh="leg_left_hip_yaw_visual" material="leg_left_hip_yaw_visual_material"/>
+
+          <body name="leg_left_hip_pitch" pos="0.027 0 0.052"
+                quat="0.653281 0.270598 -0.653281 -0.270598">
+            <joint axis="0 0 1" name="leg_left_hip_pitch_joint" type="hinge"
+                   range="-1.8980455615438334 0.9817477042468103"/>
+            <inertial pos="0.0030405 0.120388 0.0210924" mass="0.947974"
+                      fullinertia="0.00286449 0.00102465 0.00259958 0.00012235 -2.15676e-05 0.000265775"/>
+            <geom class="collision"
+                  pos="0.00597627 0.039 0.0295" quat="0.5 0.5 0.5 -0.5"
+                  type="cylinder" size="0.05 0.065"/>
+            <geom type="mesh" class="visual"
+                  pos="0.0030405 0.120388 0.0210924"
+                  quat="0.707107 0.707107 0 0"
+                  mesh="leg_left_hip_pitch_visual" material="leg_left_hip_pitch_visual_material"/>
+
+            <body name="leg_left_knee_pitch" pos="0 0.15 -0.018" quat="0 0 0 -1">
+              <joint axis="0 0 1" name="leg_left_knee_pitch_joint" type="hinge"
+                     range="0 2.443460952791784"/>
+              <inertial pos="-4.14041e-05 -0.112249 0.0257397" mass="0.653864"
+                        fullinertia="0.00230126 0.000559753 0.00203727 -4.24923e-07 1.36589e-06 3.7889e-05"/>
+              <geom class="collision"
+                    pos="0 -0.115 0.022" quat="0.5 -0.5 0.5 0.5"
+                    type="cylinder" size="0.04 0.075"/>
+              <geom type="mesh" class="visual"
+                    pos="-4.14041e-05 -0.112249 0.0257397"
+                    quat="0 0 0.707107 0.707107"
+                    mesh="leg_left_knee_pitch_visual" material="leg_left_knee_pitch_visual_material"/>
+
+              <body name="leg_left_ankle_pitch" pos="0 -0.16 -0.003" quat="0 0 0 -1">
+                <joint axis="0 0 1" name="leg_left_ankle_pitch_joint" type="hinge"
+                       range="-0.7853981633972573 0.7853981633976392"/>
+                <inertial pos="0.0131065 0.0273743 0.0274153" mass="0.106196"
+                          fullinertia="0.000188241 0.000142962 8.17202e-05 -2.50802e-05 -7.26755e-06 -7.72963e-06"/>
+                <geom type="mesh" class="visual"
+                      pos="0.0131065 0.0273743 0.0274153"
+                      quat="0.707107 0.707107 0 0"
+                      mesh="leg_left_ankle_pitch_visual" material="leg_left_ankle_pitch_visual_material"/>
+
+                <body name="leg_left_ankle_roll" pos="0.03 0.05 0.025"
+                      quat="0.707107 0 0.707107 0">
+                  <joint axis="0 0 1" name="leg_left_ankle_roll_joint" type="hinge"
+                         range="-0.26179938779931816 0.26179938779898065"/>
+                  <inertial pos="2.29341e-05 0.0226611 0.0197836" mass="0.706476"
+                            fullinertia="0.00198705 0.00190341 0.000619673 5.37011e-07 -8.3949e-07 0.000143151"/>
+                  <geom class="collision"
+                        pos="0 0.03 0.006" quat="0.707107 0.707107 0 0"
+                        type="box" size="0.036 0.11 0.02"/>
+                  <geom type="mesh" class="visual"
+                        pos="2.29341e-05 0.0226611 0.0197836"
+                        quat="0.5 0.5 -0.5 0.5"
+                        mesh="leg_left_ankle_roll_visual" material="leg_left_ankle_roll_visual_material"/>
+                </body><!-- leg_left_ankle_roll -->
+              </body><!-- leg_left_ankle_pitch -->
+            </body><!-- leg_left_knee_pitch -->
+          </body><!-- leg_left_hip_pitch -->
+        </body><!-- leg_left_hip_yaw -->
+      </body><!-- leg_left_hip_roll -->
+
+      <!-- ── RIGHT LEG (BHL biped 완전 동일) ──────────────────── -->
+      <body name="leg_right_hip_roll" pos="-0.0290919 -0.08 0.542631"
+            quat="0 0.382683 0 0.92388">
+        <joint axis="0 0 1" name="leg_right_hip_roll_joint" type="hinge"
+               range="-1.5707963267948895 0.17453292519944005"/>
+        <inertial pos="0.00410941 -0.00018505 -0.0464478" mass="0.83786"
+                  fullinertia="0.000979766 0.000896334 0.000727235 -3.69135e-06 1.57667e-05 -4.74708e-06"/>
+        <geom type="mesh" class="visual"
+              pos="0.00410941 -0.00018505 -0.0464478"
+              quat="0 -0.382683 0 -0.92388"
+              mesh="leg_right_hip_roll_visual" material="leg_right_hip_roll_visual_material"/>
+
+        <body name="leg_right_hip_yaw" pos="-0.027 0 -0.052" quat="0.5 -0.5 -0.5 0.5">
+          <joint axis="0 0 1" name="leg_right_hip_yaw_joint" type="hinge"
+                 range="-0.5890486225480871 0.9817477042468095"/>
+          <inertial pos="0.00411632 -1.3851e-05 0.0463238" mass="0.837683"
+                    fullinertia="0.000978901 0.000898454 0.000723868 -1.63559e-06 -1.90847e-05 -5.23378e-06"/>
+          <geom type="mesh" class="visual"
+                pos="0.00411632 -1.3851e-05 0.0463238"
+                quat="0.270598 0.653281 -0.653281 0.270598"
+                mesh="leg_right_hip_yaw_visual" material="leg_right_hip_yaw_visual_material"/>
+
+          <body name="leg_right_hip_pitch" pos="-0.027 0 0.052"
+                quat="0.653281 0.270598 -0.653281 -0.270598">
+            <joint axis="0 0 1" name="leg_right_hip_pitch_joint" type="hinge"
+                   range="-1.8980455615438334 0.9817477042468103"/>
+            <inertial pos="0.00319928 0.120388 -0.0210924" mass="0.947974"
+                      fullinertia="0.00286448 0.00102371 0.00259864 0.000117078 2.6845e-05 -0.000265774"/>
+            <geom class="collision"
+                  pos="0.00597627 0.039 -0.0295" quat="0.5 0.5 0.5 -0.5"
+                  type="cylinder" size="0.05 0.065"/>
+            <geom type="mesh" class="visual"
+                  pos="0.00319928 0.120388 -0.0210924"
+                  quat="0.707107 0.707107 0 0"
+                  mesh="leg_right_hip_pitch_visual" material="leg_right_hip_pitch_visual_material"/>
+
+            <body name="leg_right_knee_pitch" pos="0 0.15 0.018" quat="1 0 0 0">
+              <joint axis="0 0 1" name="leg_right_knee_pitch_joint" type="hinge"
+                     range="0 2.443460952791953"/>
+              <inertial pos="-5.09429e-05 0.112249 -0.0257397" mass="0.653864"
+                        fullinertia="0.00230126 0.000559752 0.00203727 1.34936e-06 -1.17826e-06 3.7889e-05"/>
+              <geom class="collision"
+                    pos="0 0.115 -0.022" quat="0.5 0.5 0.5 -0.5"
+                    type="cylinder" size="0.04 0.075"/>
+              <geom type="mesh" class="visual"
+                    pos="-5.09429e-05 0.112249 -0.0257397"
+                    quat="0.707107 0.707107 0 0"
+                    mesh="leg_right_knee_pitch_visual" material="leg_right_knee_pitch_visual_material"/>
+
+              <body name="leg_right_ankle_pitch" pos="0 0.16 0.003" quat="1 0 0 0">
+                <joint axis="0 0 1" name="leg_right_ankle_pitch_joint" type="hinge"
+                       range="-0.7853981633975149 0.7853981633973817"/>
+                <inertial pos="0.0131065 0.0273743 -0.0274153" mass="0.106196"
+                          fullinertia="0.000188241 0.000142962 8.17203e-05 -2.50802e-05 7.26754e-06 7.72962e-06"/>
+                <geom type="mesh" class="visual"
+                      pos="0.0131065 0.0273743 -0.0274153"
+                      quat="0.707107 0.707107 0 0"
+                      mesh="leg_right_ankle_pitch_visual" material="leg_right_ankle_pitch_visual_material"/>
+
+                <body name="leg_right_ankle_roll" pos="0.03 0.05 -0.025"
+                      quat="0.707107 0 0.707107 0">
+                  <joint axis="0 0 1" name="leg_right_ankle_roll_joint" type="hinge"
+                         range="-0.26179938779927375 0.26179938779902506"/>
+                  <inertial pos="2.29341e-05 0.0226611 0.0197836" mass="0.706476"
+                            fullinertia="0.00198705 0.00190341 0.000619673 5.37011e-07 -8.3949e-07 0.000143151"/>
+                  <geom class="collision"
+                        pos="0 0.03 0.006" quat="0.707107 0.707107 0 0"
+                        type="box" size="0.036 0.11 0.02"/>
+                  <geom type="mesh" class="visual"
+                        pos="2.29341e-05 0.0226611 0.0197836"
+                        quat="0.5 0.5 -0.5 0.5"
+                        mesh="leg_right_ankle_roll_visual" material="leg_right_ankle_roll_visual_material"/>
+                </body><!-- leg_right_ankle_roll -->
+              </body><!-- leg_right_ankle_pitch -->
+            </body><!-- leg_right_knee_pitch -->
+          </body><!-- leg_right_hip_pitch -->
+        </body><!-- leg_right_hip_yaw -->
+      </body><!-- leg_right_hip_roll -->
+
+    </body><!-- base -->
+  </worldbody>
+
+  <!-- ── Actuator ────────────────────────────────────────────── -->
+  <!-- play_mujoco.py에서 PD 계산 후 ctrl[i] = torque 방식 -->
+  <actuator>
+    <motor name="leg_left_hip_roll_joint"    joint="leg_left_hip_roll_joint"    forcerange="-20 20"/>
+    <motor name="leg_left_hip_yaw_joint"     joint="leg_left_hip_yaw_joint"     forcerange="-20 20"/>
+    <motor name="leg_left_hip_pitch_joint"   joint="leg_left_hip_pitch_joint"   forcerange="-20 20"/>
+    <motor name="leg_left_knee_pitch_joint"  joint="leg_left_knee_pitch_joint"  forcerange="-20 20"/>
+    <motor name="leg_left_ankle_pitch_joint" joint="leg_left_ankle_pitch_joint" forcerange="-20 20"/>
+    <motor name="leg_left_ankle_roll_joint"  joint="leg_left_ankle_roll_joint"  forcerange="-20 20"/>
+    <motor name="leg_right_hip_roll_joint"   joint="leg_right_hip_roll_joint"   forcerange="-20 20"/>
+    <motor name="leg_right_hip_yaw_joint"    joint="leg_right_hip_yaw_joint"    forcerange="-20 20"/>
+    <motor name="leg_right_hip_pitch_joint"  joint="leg_right_hip_pitch_joint"  forcerange="-20 20"/>
+    <motor name="leg_right_knee_pitch_joint" joint="leg_right_knee_pitch_joint" forcerange="-20 20"/>
+    <motor name="leg_right_ankle_pitch_joint" joint="leg_right_ankle_pitch_joint" forcerange="-20 20"/>
+    <motor name="leg_right_ankle_roll_joint" joint="leg_right_ankle_roll_joint" forcerange="-20 20"/>
+  </actuator>
+
+  <!-- ── Sensor ──────────────────────────────────────────────── -->
+  <sensor>
+    <framequat name="imu_quat" objtype="site" objname="imu"/>
+    <gyro      name="imu_gyro" site="imu"/>
+    <framepos  name="frame_pos" objtype="site" objname="imu"/>
+  </sensor>
+
+</mujoco>

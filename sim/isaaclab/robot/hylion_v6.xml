@@ -27,6 +27,9 @@
 
 <mujoco model="hylion_v6">
 
+  <!-- 모든 각도를 라디안으로 해석 (BHL biped 원본과 동일) -->
+  <compiler angle="radian" autolimits="true"/>
+
   <!-- ── 시뮬레이션 옵션 ──────────────────────────────────────── -->
   <option
     timestep="0.005"

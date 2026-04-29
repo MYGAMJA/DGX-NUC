@@ -1,6 +1,9 @@
-"""Sim-to-sim: Hylion v6 IsaacLab policy → MuJoCo 검증 (MJCF 기반).
+"""Sim-to-sim: Hylion IsaacLab policy → MuJoCo 검증 (MJCF 기반).
 
-MJCF(sim/isaaclab/robot/hylion_v6.xml)를 직접 로드하므로
+기본 MJCF: sim/isaaclab/robot/hylion_v7.xml
+  (BHL biped kinematics + Hylion base mass 4.83 kg + SO-ARM 팔 3.44 kg × 2)
+  총 질량 19.89 kg, mass correction 불필요.
+  hylion_v6.xml (발 geom quat 수정판)도 사용 가능.
 URDF 패칭·freejoint 추가·IMU 수동 변환이 불필요하다.
 
 물리 설정 (robot_cfg_BG.py 기준):
@@ -35,8 +38,8 @@ import sys
 import numpy as np
 
 REPO_ROOT    = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-DEFAULT_CKPT = os.path.join(REPO_ROOT, "checkpoints/biped/stage_d4_hylion_v6/best.pt")
-DEFAULT_MJCF = os.path.join(REPO_ROOT, "sim/isaaclab/robot/hylion_v6.xml")
+DEFAULT_CKPT = os.path.join(REPO_ROOT, "checkpoints/biped/stage_e4_hylion_v6/best.pt")
+DEFAULT_MJCF = os.path.join(REPO_ROOT, "sim/isaaclab/robot/hylion_v7.xml")
 
 # IsaacLab env_cfg.py 기준 다리 joint 순서 (action 12-dim 대응)
 LEG_JOINTS = [
