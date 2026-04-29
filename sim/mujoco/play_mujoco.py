@@ -35,7 +35,7 @@ import sys
 import numpy as np
 
 REPO_ROOT    = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-DEFAULT_CKPT = os.path.join(REPO_ROOT, "checkpoints/biped/stage_d5_hylion_v6/best.pt")
+DEFAULT_CKPT = os.path.join(REPO_ROOT, "checkpoints/biped/stage_d4_hylion_v6/best.pt")
 DEFAULT_MJCF = os.path.join(REPO_ROOT, "sim/isaaclab/robot/hylion_v6.xml")
 
 # IsaacLab env_cfg.py 기준 다리 joint 순서 (action 12-dim 대응)
@@ -125,6 +125,8 @@ def run(args):
     model = mujoco.MjModel.from_xml_path(args.mjcf)
     # RK4는 contact 시스템에 불안정 → implicitfast(MuJoCo 3.x default)로 교체
     model.opt.integrator = mujoco.mjtIntegrator.mjINT_IMPLICITFAST
+    # 학습 physics 200Hz와 일치시키기 위해 timestep 강제 (MJCF마다 다를 수 있음)
+    model.opt.timestep = SIM_DT
 
     # 학습 로봇 총 질량 보정: MJCF는 SO-ARM 팔 body 없이 13kg, 학습은 19.89kg
     # 누락 질량을 base body에 lumped mass로 추가
@@ -203,16 +205,9 @@ def run(args):
     survived    = 0
 
     def get_obs():
-        # freejoint qvel[3:6] = world-frame angular velocity
-        # R.T @ omega_world = body-frame angular velocity (IsaacLab 기준과 동일)
-        quat_wxyz = data.qpos[3:7].astype(np.float32)
-        w, x, y, z = quat_wxyz
-        R = np.array([
-            [1-2*(y*y+z*z),   2*(x*y-w*z),   2*(x*z+w*y)],
-            [  2*(x*y+w*z), 1-2*(x*x+z*z),   2*(y*z-w*x)],
-            [  2*(x*z-w*y),   2*(y*z+w*x), 1-2*(x*x+y*y)],
-        ], dtype=np.float32)
-        o_angvel  = R.T @ data.qvel[3:6].astype(np.float32)
+        # imu_gyro sensor: body-frame angular velocity (IsaacLab base_ang_vel 기준과 동일)
+        o_angvel  = data.sensordata[gyro_adr:gyro_adr+3].astype(np.float32)
+        quat_wxyz = data.sensordata[quat_adr:quat_adr+4].astype(np.float32)
         o_grav    = projected_gravity_vec(quat_wxyz)
         o_qpos    = np.array([data.qpos[qi] for qi in qpos_ids], np.float32) - DEFAULT_JOINT_POS
         o_qvel    = np.array([data.qvel[vi] for vi in qvel_ids], np.float32)

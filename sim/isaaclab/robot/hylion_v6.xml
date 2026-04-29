@@ -45,7 +45,7 @@
   -->
   <default>
     <geom contype="1" conaffinity="0" friction="0.8 0.1 0.1" condim="3"/>
-    <joint damping="0.01" armature="0.007"/>
+    <joint damping="0.01" armature="0.007" frictionloss="0.1"/>
     <motor ctrllimited="true" ctrlrange="-6 6"/>
   </default>
 
@@ -83,6 +83,12 @@
 
       <!-- IMU 센서 부착점 -->
       <site name="imu_site" pos="0.0617 0 0.68" size="0.005"/>
+
+      <!-- base inertial: BHL biped 기준 CoM (z=0.638), 질량 4.83 kg -->
+      <!-- body_ipos=[0,0,0.71] 오류 방지 — 자동계산 억제용 -->
+      <inertial pos="-0.00462 0.000372 0.6379"
+                mass="4.83"
+                fullinertia="0.0569 0.0432 0.0270 -6.2e-6 -0.00110 -2.3e-5"/>
 
       <!-- base 충돌 box (BHL collision box 기준) -->
       <geom name="base_col"
@@ -170,9 +176,9 @@
                          axis="0 0 1"
                          range="-0.261799 0.261799"
                          damping="0.01" armature="0.002"/>
-                  <!-- foot collision: box -->
-                  <geom name="lfoot_col" type="box" size="0.055 0.025 0.012"
-                        pos="0.02 0.023 0.02" material="ankle"/>
+                  <!-- foot collision: BHL biped 기준 foot geom (quat=90°RX: long axis→world-z OK) -->
+                  <geom name="lfoot_col" type="box" size="0.036 0.11 0.02"
+                        pos="0.0 0.03 0.006" quat="0.707107 0.707107 0 0" material="ankle"/>
                   <inertial pos="0.000023 0.022661 0.019784"
                             mass="0.7065"
                             diaginertia="0.002 0.001 0.002"/>
@@ -230,7 +236,8 @@
 
             <!-- knee_R -->
             <body name="leg_right_knee_pitch"
-                  pos="0.000000 0.150000 0.018000">
+                  pos="0.000000 0.150000 0.018000"
+                  quat="1 0 0 0">
               <joint name="leg_right_knee_pitch_joint" type="hinge"
                      axis="0 0 1"
                      range="0 2.44346"
@@ -243,7 +250,8 @@
 
               <!-- ankle_pitch_R -->
               <body name="leg_right_ankle_pitch"
-                    pos="0.000000 0.160000 0.003000">
+                    pos="0.000000 0.160000 0.003000"
+                    quat="1 0 0 0">
                 <joint name="leg_right_ankle_pitch_joint" type="hinge"
                        axis="0 0 1"
                        range="-0.785398 0.785398"
@@ -262,9 +270,9 @@
                          axis="0 0 1"
                          range="-0.261799 0.261799"
                          damping="0.01" armature="0.002"/>
-                  <!-- foot collision: box -->
-                  <geom name="rfoot_col" type="box" size="0.055 0.025 0.012"
-                        pos="0.02 0.023 -0.02" material="ankle"/>
+                  <!-- foot collision: BHL biped 기준 foot geom (quat=90°RX: long axis→world-z OK) -->
+                  <geom name="rfoot_col" type="box" size="0.036 0.11 0.02"
+                        pos="0.0 0.03 0.006" quat="0.707107 0.707107 0 0" material="ankle"/>
                   <inertial pos="0.000023 0.022661 0.019784"
                             mass="0.7065"
                             diaginertia="0.002 0.001 0.002"/>
@@ -275,6 +283,19 @@
           </body><!-- hip_pitch_R -->
         </body><!-- hip_yaw_R -->
       </body><!-- hip_roll_R -->
+
+      <!-- ──────────────────────────────────────────────────────
+           SO-ARM101 팔 (static, 관절 없음)
+           학습: SO-ARM 총 6.88 kg (3.44 kg × 2) base에 lumped mass로 추가
+           여기서는 실제 위치(y=±0.12, z=0.75)에 배치 → CoM 정확히 반영
+      ──────────────────────────────────────────────────────── -->
+      <body name="soarm_left" pos="0.0 0.12 0.75">
+        <inertial pos="0 0 -0.1" mass="3.44" diaginertia="0.025 0.025 0.005"/>
+      </body><!-- soarm_left -->
+
+      <body name="soarm_right" pos="0.0 -0.12 0.75">
+        <inertial pos="0 0 -0.1" mass="3.44" diaginertia="0.025 0.025 0.005"/>
+      </body><!-- soarm_right -->
 
     </body><!-- base -->
   </worldbody>
