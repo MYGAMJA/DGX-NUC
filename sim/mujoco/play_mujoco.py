@@ -141,6 +141,41 @@ def run(args):
         print(f"[SIM2SIM] Mass correction: +{mass_deficit:.2f} kg to base "
               f"(total {model.body_mass.sum():.2f} kg)")
 
+    # 추가 base mass (payload 시뮬, --extra-base-mass 옵션)
+    if abs(args.extra_base_mass) > 0.01:
+        base_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "base")
+        model.body_mass[base_id] += args.extra_base_mass
+        print(f"[SIM2SIM] Extra payload: {args.extra_base_mass:+.2f} kg → base "
+              f"(total {model.body_mass.sum():.2f} kg)")
+
+    # ground friction override (--ground-friction)
+    if args.ground_friction > 0:
+        ground_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "ground")
+        if ground_id >= 0:
+            # friction[0]=slide, [1]=torsion, [2]=roll. slide만 변경, 나머지 유지
+            model.geom_friction[ground_id, 0] = args.ground_friction
+            print(f"[SIM2SIM] Ground friction overridden: slide={args.ground_friction}")
+
+    # base CoM offset (--com-offset)
+    com_offset = np.array([float(x) for x in args.com_offset.split(",")], dtype=np.float64)
+    if np.linalg.norm(com_offset) > 1e-6:
+        base_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "base")
+        orig_ipos = model.body_ipos[base_id].copy()
+        model.body_ipos[base_id] = orig_ipos + com_offset
+        print(f"[SIM2SIM] CoM shift: {com_offset*1000} mm (mag={np.linalg.norm(com_offset)*1000:.1f}mm) "
+              f"new ipos={model.body_ipos[base_id]}")
+
+    # 경사 시뮬 (--slope-deg) — gravity 벡터를 회전, ground는 그대로
+    # +deg = +x 방향 내리막 (로봇이 앞으로 끌리는 효과)
+    if abs(args.slope_deg) > 0.01:
+        g_mag = abs(model.opt.gravity[2]) if model.opt.gravity[2] != 0 else 9.81
+        slope_rad = np.radians(args.slope_deg)
+        model.opt.gravity[0] = g_mag * np.sin(slope_rad)
+        model.opt.gravity[2] = -g_mag * np.cos(slope_rad)
+        equiv_force = 19.89 * g_mag * np.sin(slope_rad)
+        print(f"[SIM2SIM] Slope {args.slope_deg:+.1f}° → gravity ({model.opt.gravity[0]:+.3f}, 0, {model.opt.gravity[2]:.3f}) "
+              f"≈ {equiv_force:.1f}N 지속 측방력")
+
     if effort_limit != DEFAULT_EFFORT_LIMIT:
         for i in range(model.nu):
             model.actuator_ctrlrange[i] = [-effort_limit, effort_limit]
@@ -203,9 +238,24 @@ def run(args):
     print(f"[SIM2SIM] KP={kp}, KD={kd}, effort_limit={effort_limit} Nm")
     print(f"[SIM2SIM] Control Hz={CONTROL_HZ}, substeps={N_SUBSTEPS}")
 
+    # ── 외란 (IsaacLab base_external_force_torque 동등 구현) ──
+    # IsaacLab: 1.5~3초 간격으로 base body에 ±force_range, ±torque_range 인가
+    push_force = args.external_push       # N (각 축 ±range)
+    push_torque = args.external_torque    # Nm
+    push_min, push_max = args.push_interval_min, args.push_interval_max
+    base_bid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "base")
+    push_active_until = 0.0
+    push_next_time = 0.0
+    rng = np.random.default_rng(seed=42)
+    if push_force > 0 or push_torque > 0:
+        print(f"[SIM2SIM] External perturbation: ±{push_force}N force, ±{push_torque}Nm torque, "
+              f"interval {push_min}~{push_max}s")
+        push_next_time = float(rng.uniform(push_min, push_max))
+
     last_action = np.zeros(12, dtype=np.float32)
     total_steps = int(args.duration * CONTROL_HZ)
     survived    = 0
+    push_count  = 0
 
     def get_obs():
         # imu_gyro sensor: body-frame angular velocity (IsaacLab base_ang_vel 기준과 동일)
@@ -219,7 +269,7 @@ def run(args):
     print(f"[SIM2SIM] Running {total_steps} steps ({args.duration}s) ...")
 
     def _run_loop(viewer=None):
-        nonlocal survived
+        nonlocal survived, push_active_until, push_next_time, push_count
         for step in range(total_steps):
             obs_np = get_obs()
 
@@ -231,6 +281,24 @@ def run(args):
             else:
                 action_np = np.zeros(12, dtype=np.float32)
             last_action[:] = action_np
+
+            # ── 외란 인가 (push_force > 0 일 때만) ──
+            if push_force > 0 or push_torque > 0:
+                t_now = step / CONTROL_HZ
+                if t_now >= push_next_time:
+                    # 새 외란 발생: 1 control step (40ms) 동안 인가
+                    fx = float(rng.uniform(-push_force, push_force))
+                    fy = float(rng.uniform(-push_force, push_force))
+                    fz = float(rng.uniform(-push_force, push_force))
+                    tx = float(rng.uniform(-push_torque, push_torque))
+                    ty = float(rng.uniform(-push_torque, push_torque))
+                    tz = float(rng.uniform(-push_torque, push_torque))
+                    data.xfrc_applied[base_bid] = [fx, fy, fz, tx, ty, tz]
+                    push_active_until = t_now + 1.0 / CONTROL_HZ
+                    push_next_time = t_now + float(rng.uniform(push_min, push_max))
+                    push_count += 1
+                elif t_now >= push_active_until:
+                    data.xfrc_applied[base_bid] = [0, 0, 0, 0, 0, 0]
 
             target_pos = DEFAULT_JOINT_POS + action_np * ACTION_SCALE
             torques = np.zeros(12, dtype=np.float32)
@@ -278,8 +346,9 @@ def run(args):
         except Exception as e:
             print(f"[SIM2SIM] Viewer error: {e}")
 
+    extra = f", pushes={push_count}" if (push_force > 0 or push_torque > 0) else ""
     print(f"[SIM2SIM] Done. Survived {survived}/{total_steps} steps "
-          f"({survived/CONTROL_HZ:.1f}s / {args.duration:.1f}s)")
+          f"({survived/CONTROL_HZ:.1f}s / {args.duration:.1f}s){extra}")
 
 
 if __name__ == "__main__":
@@ -304,6 +373,22 @@ if __name__ == "__main__":
     parser.add_argument("--device",       type=str,   default="cpu")
     parser.add_argument("--no-viewer",    action="store_true", dest="no_viewer",
                         help="headless 실행 (SSH 환경)")
+    parser.add_argument("--external-push", type=float, default=0.0, dest="external_push",
+                        help="base body 외란 force ±N (각 축, default 0=off)")
+    parser.add_argument("--external-torque", type=float, default=0.0, dest="external_torque",
+                        help="base body 외란 torque ±Nm (각 축, default 0=off)")
+    parser.add_argument("--push-interval-min", type=float, default=1.5, dest="push_interval_min",
+                        help="외란 최소 간격 초 (default 1.5)")
+    parser.add_argument("--push-interval-max", type=float, default=3.0, dest="push_interval_max",
+                        help="외란 최대 간격 초 (default 3.0)")
+    parser.add_argument("--extra-base-mass", type=float, default=0.0, dest="extra_base_mass",
+                        help="base body에 추가할 mass kg (payload 시뮬, default 0)")
+    parser.add_argument("--ground-friction", type=float, default=0.0, dest="ground_friction",
+                        help="ground geom의 sliding friction (default 0=MJCF값 유지). 0.3~1.5 범위 권장")
+    parser.add_argument("--slope-deg", type=float, default=0.0, dest="slope_deg",
+                        help="경사도 deg (gravity 벡터 회전, +x 방향 내리막 시뮬, default 0)")
+    parser.add_argument("--com-offset", type=str, default="0,0,0", dest="com_offset",
+                        help="base CoM offset 'x,y,z' meter (default 0,0,0). 예: '0.032,0,0' = +x로 32mm shift")
     args = parser.parse_args()
 
     if not args.zero_action and not os.path.isfile(args.ckpt):

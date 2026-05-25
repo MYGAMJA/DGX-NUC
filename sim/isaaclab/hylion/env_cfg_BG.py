@@ -33,12 +33,22 @@ class HylionEnvCfg_BG(LocomotionVelocityEnvCfg):
         feet_air_threshold = float(os.environ.get("HYLION_FEET_AIR_THRESHOLD", "0.4"))
         leg_gain_scale = float(os.environ.get("HYLION_LEG_GAIN_SCALE", "1.0"))
         base_mass_add_kg = float(os.environ.get("HYLION_BASE_MASS_ADD_KG", "0.0"))
+        # mass 범위 모드 (HYLION_BASE_MASS_RANGE_LO/HI 둘 다 0이 아니면 활성화)
+        # 2026-05-01 추가: SO-ARM payload 변동 학습용
+        base_mass_range_lo = float(os.environ.get("HYLION_BASE_MASS_RANGE_LO", "0.0"))
+        base_mass_range_hi = float(os.environ.get("HYLION_BASE_MASS_RANGE_HI", "0.0"))
         contact_body_regex = os.environ.get("HYLION_CONTACT_BODY_REGEX", ".*_ankle_roll")
         # Stage-C: perturbation + wider command range
         enable_perturbation = os.environ.get("HYLION_ENABLE_PERTURBATION", "0") == "1"
         max_lin_vel_x = float(os.environ.get("HYLION_MAX_LIN_VEL_X", "0.5"))
         perturb_force = float(os.environ.get("HYLION_PERTURB_FORCE", "10.0"))
         perturb_torque = float(os.environ.get("HYLION_PERTURB_TORQUE", "3.0"))
+        # 외란 인가 간격 (default 1.5~3s, 블록 보행 시뮬엔 0.5~2s 권장)
+        perturb_interval_min = float(os.environ.get("HYLION_PERTURB_INTERVAL_MIN", "1.5"))
+        perturb_interval_max = float(os.environ.get("HYLION_PERTURB_INTERVAL_MAX", "3.0"))
+        # 외란 mode: "interval" (default, 우리) | "reset" (BHL 본가)
+        # 2026-05-02: BHL 정공법 검증용. interval 모드가 catastrophic forgetting 유발 가설.
+        perturb_mode = os.environ.get("HYLION_PERTURB_MODE", "interval")
         standing_ratio = float(os.environ.get("HYLION_STANDING_RATIO", "0.02"))
 
         if hasattr(self, "rewards") and hasattr(self.rewards, "feet_air_time") and self.rewards.feet_air_time is not None:
@@ -53,7 +63,13 @@ class HylionEnvCfg_BG(LocomotionVelocityEnvCfg):
         # v6 안정화: 초기 디버그 단계에서는 공격적인 도메인 랜덤화/외력 주입 비활성화.
         if hasattr(self, "events"):
             if hasattr(self.events, "add_base_mass"):
-                if abs(base_mass_add_kg) > 1.0e-9:
+                # 우선순위: range > fixed > disable
+                if base_mass_range_lo != 0.0 or base_mass_range_hi != 0.0:
+                    # 범위 모드 (BHL 식, payload 변동 학습)
+                    self.events.add_base_mass.params["mass_distribution_params"] = (base_mass_range_lo, base_mass_range_hi)
+                    self.events.add_base_mass.params["operation"] = "add"
+                elif abs(base_mass_add_kg) > 1.0e-9:
+                    # 고정값 모드 (legacy stage curriculum)
                     self.events.add_base_mass.params["mass_distribution_params"] = (base_mass_add_kg, base_mass_add_kg)
                     self.events.add_base_mass.params["operation"] = "add"
                 else:
@@ -65,6 +81,13 @@ class HylionEnvCfg_BG(LocomotionVelocityEnvCfg):
                     perturbation_torque = float(os.environ.get("HYLION_PERTURB_TORQUE", "1.0"))
                     self.events.base_external_force_torque.params["force_range"] = (-perturbation_force, perturbation_force)
                     self.events.base_external_force_torque.params["torque_range"] = (-perturbation_torque, perturbation_torque)
+                    # mode 결정 (interval vs reset, BHL 정공법은 reset)
+                    if perturb_mode == "reset":
+                        self.events.base_external_force_torque.mode = "reset"
+                        # reset 모드는 interval_range_s 무관
+                    else:
+                        self.events.base_external_force_torque.mode = "interval"
+                        self.events.base_external_force_torque.interval_range_s = (perturb_interval_min, perturb_interval_max)
                 else:
                     self.events.base_external_force_torque = None
             if hasattr(self.events, "scale_all_actuator_torque_constant") and self.events.scale_all_actuator_torque_constant is not None:
@@ -105,11 +128,13 @@ class HylionEnvCfg_BG(LocomotionVelocityEnvCfg):
             # Stage-C: 제자리 서기 비율 증가 (팔 조작 시 standing 안정화 훈련)
             if enable_perturbation:
                 self.commands.base_velocity.rel_standing_envs = standing_ratio
-        # Stage-C: 팔 하중 변동 시뮬레이션 (SO-ARM 움직임 → CoM 이동 모델링)
-        # add_base_mass를 환경변수로 이미 처리하지 않는 경우 여기서 랜덤 범위 덮어씀
-        if enable_perturbation and hasattr(self, "events") and hasattr(self.events, "add_base_mass") and self.events.add_base_mass is not None:
-            if abs(base_mass_add_kg) < 1.0e-9:
-                # perturbation 모드 + base_mass=0: 팔 하중 변동 범위(-0.3~1.5 kg) 적용
+        # Stage-C legacy: 팔 하중 변동 시뮬레이션 (SO-ARM 움직임 → CoM 이동 모델링)
+        # 2026-05-01: HYLION_BASE_MASS_RANGE_LO/HI 가 명시되지 않은 경우에만 default(-0.3, 1.5) 적용
+        if (enable_perturbation and hasattr(self, "events") and hasattr(self.events, "add_base_mass")
+                and self.events.add_base_mass is not None):
+            if (abs(base_mass_add_kg) < 1.0e-9
+                    and base_mass_range_lo == 0.0
+                    and base_mass_range_hi == 0.0):
                 self.events.add_base_mass.params["mass_distribution_params"] = (-0.3, 1.5)
                 self.events.add_base_mass.params["operation"] = "add"
         # Track both left/right ankle_roll links at the end of each leg chain.

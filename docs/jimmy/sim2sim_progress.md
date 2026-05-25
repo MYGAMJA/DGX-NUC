@@ -157,7 +157,8 @@ hylion_v7 (수정 전): range 0 ~ 2.443 deg = 0 ~ 0.043 rad (극히 작은 범�
 ## 개선 방향
 
 1. **IsaacLab 시각화 검증**: MuJoCo 대신 IsaacLab play_script로 보행 확인 (참고용)
-2. **더 나은 체크포인트**: stage_e4_hylion_v6 이후 추가 훈련
+2. **±50N robustness 학습**: 현재 ±30N(E4)에서 학습 fall rate 100%로 외란 robustness 부족.
+   `docs/ETHAN/active/32_training_plan_50N_2026-04-30.md` 의 작은 증분 커리큘럼으로 확장 예정.
 
 ---
 

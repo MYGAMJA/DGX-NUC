@@ -228,7 +228,7 @@ gym.register(
     },
 )
 
-# Stage E4: base_mass ±2.0kg, 외력 ±30N (최종 목표 ✨)
+# Stage E4: base_mass ±2.0kg, 외력 ±30N
 gym.register(
     id="Velocity-Hylion-BG-E4-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
@@ -236,5 +236,19 @@ gym.register(
     kwargs={
         "env_cfg_entry_point": "hylion.env_cfg_BG:HylionEnvCfg_BG",
         "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg_stageE.HylionPPORunnerCfg_StageE4,
+    },
+)
+
+# ── Generic 단계 (2026-04-30): env var 로 외력/mass 임의 조정용 ───────────────
+# 프랙셔널 스테이지 (E0.3, E1.4, E2.7 등) + F 단계 (E5~E8, ±33~50N) 지원.
+# PPO 설정은 StageE1과 동일 (epochs=2, entropy=0.012, max_iter=8000).
+# CLI `--max_iterations N` 으로 iter 수 stage 별 override.
+gym.register(
+    id="Velocity-Hylion-BG-Generic-v0",
+    entry_point="isaaclab.envs:ManagerBasedRLEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": "hylion.env_cfg_BG:HylionEnvCfg_BG",
+        "rsl_rl_cfg_entry_point": rsl_rl_ppo_cfg_stageE.HylionPPORunnerCfg_StageE1,
     },
 )

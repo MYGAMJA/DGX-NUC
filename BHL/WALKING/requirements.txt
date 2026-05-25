@@ -1,0 +1,6 @@
+pyserial
+python-can
+onnxruntime>=1.15
+omegaconf
+loop_rate_limiters
+numpy
