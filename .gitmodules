@@ -1,0 +1,3 @@
+[submodule "BHL/official_manuals/canable"]
+	path = BHL/official_manuals/canable
+	url = https://github.com/makerbase-mks/CANable-MKS.git

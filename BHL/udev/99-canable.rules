@@ -1,0 +1,9 @@
+# MKS CANable V2.0 Pro — 시리얼 기반 고정 심볼릭 링크
+# ttyACM 번호가 재꽂을 때마다 바뀌는 문제 해결용.
+# 설치: sudo cp 99-canable.rules /etc/udev/rules.d/ && sudo udevadm control --reload-rules && sudo udevadm trigger --subsystem-match=tty
+
+# 왼다리 버스 (can0) — serial 209B31A05842
+SUBSYSTEM=="tty", ATTRS{idVendor}=="16d0", ATTRS{idProduct}=="117e", ATTRS{serial}=="209B31A05842", SYMLINK+="canable-left"
+
+# 오른다리 버스 (can1) — serial 20A031A65842
+SUBSYSTEM=="tty", ATTRS{idVendor}=="16d0", ATTRS{idProduct}=="117e", ATTRS{serial}=="20A031A65842", SYMLINK+="canable-right"
