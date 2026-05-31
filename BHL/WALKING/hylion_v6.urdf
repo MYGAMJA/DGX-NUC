@@ -1,0 +1,1213 @@
+<?xml version="1.0" ?>
+<!-- Hylion v6: v5 + shoulder structure boxes (3kg each) between base and SO-ARM -->
+<!-- BHL source: onshape-to-robot, document_id: fc6443b1d89dcba950e85b60 -->
+<!-- SO-ARM source: onshape-to-robot, so101_new_calib -->
+<!-- Strategy: v5 base + 3kg structure box on each side connecting base to SO-ARM -->
+<!-- BHL collision box: x=+-0.075, y=+-0.07, z=0.595~0.825 -->
+<!-- SO-ARM mount: at base collision box center (z=0.71), outside y walls (y=+-0.12) -->
+<!-- Structure box: 0.08 x 0.05 x 0.15m, 3kg each, at y=+-0.095 z=0.71 -->
+<robot name="hylion">
+
+  <!-- ============================================================ -->
+  <!-- BASE -->
+  <!-- ============================================================ -->
+
+  <link name="base">
+    <inertial>
+      <origin xyz="-0.0030965 0.000264765 0.675059" rpy="0 0 0"/>
+      <mass value="4.44401"/>
+      <inertia ixx="0.0667167" ixy="1.21502e-06" ixz="-0.00131643" iyy="0.0447686" iyz="2.88151e-05" izz="0.0318661"/>
+    </inertial>
+    <collision>
+      <origin xyz="-6.93889e-18 7.53521e-18 0.71" rpy="-1.13243e-14 -5.13117e-16 -1.5708"/>
+      <geometry>
+        <box size="0.15 0.14 0.23"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0030965 0.000264765 0.675059" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/base_visual.stl"/>
+      </geometry>
+      <material name="base_parts_material">
+        <color rgba="0.378685 0.40631 0.372653 0.773376"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- IMU -->
+  <link name="imu_2">
+    <inertial>
+      <origin xyz="3.00866e-18 9.72026e-19 0.0025" rpy="0 0 0"/>
+      <mass value="0.00197704"/>
+      <inertia ixx="1.11441e-07" ixy="-1.67651e-38" ixz="0" iyy="4.06118e-08" iyz="1.10203e-39" izz="1.43815e-07"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 9.72026e-19 0.0025" rpy="6.12323e-17 -1.13243e-14 1.20616e-15"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/imu_2_visual.stl"/>
+      </geometry>
+      <material name="imu_2_parts_material">
+        <color rgba="0.141176 0.694118 0.65098 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="imu">
+    <origin xyz="0 0 0" rpy="0 -0 0"/>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+  <joint name="imu_frame" type="fixed">
+    <origin xyz="0 -6.33816e-19 0.005" rpy="0 -0 -9.54491e-32"/>
+    <parent link="imu_2"/>
+    <child link="imu"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+  <joint name="imu" type="fixed">
+    <origin xyz="0.061722 -5.97549e-17 0.68" rpy="-6.12323e-17 1.13243e-14 -1.20616e-15"/>
+    <parent link="base"/>
+    <child link="imu_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+
+  <!-- ============================================================ -->
+  <!-- LEFT LEG (from bhl_original_view.urdf, unchanged) -->
+  <!-- ============================================================ -->
+
+  <link name="leg_left_hip_roll">
+    <inertial>
+      <origin xyz="-0.00410941 -0.000112596 -0.0464623" rpy="0 0 0"/>
+      <mass value="0.83786"/>
+      <inertia ixx="0.000979918" ixy="6.45954e-06" ixz="-1.63173e-05" iyy="0.000896043" iyz="-5.43389e-06" izz="0.000727678"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.00410941 -0.000112596 -0.0464623" rpy="-3.37047e-15 -0.785398 1.29382e-14"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_left_hip_roll_visual.stl"/>
+      </geometry>
+      <material name="leg_left_hip_roll_parts_material">
+        <color rgba="0.514202 0.546917 0.498371 0.699497"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_left_hip_yaw">
+    <inertial>
+      <origin xyz="-0.00411632 -8.63203e-05 0.0463382" rpy="0 0 0"/>
+      <mass value="0.837683"/>
+      <inertia ixx="0.000979031" ixy="-1.13217e-06" ixz="1.96352e-05" iyy="0.000898166" iyz="-5.91541e-06" izz="0.000724287"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.00411632 -8.63203e-05 0.0463382" rpy="-3.14159 -0.785398 -1.5708"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_left_hip_yaw_visual.stl"/>
+      </geometry>
+      <material name="leg_left_hip_yaw_parts_material">
+        <color rgba="0.514113 0.546836 0.49828 0.699434"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_left_hip_pitch">
+    <inertial>
+      <origin xyz="0.0030405 0.120388 0.0210924" rpy="0 0 0"/>
+      <mass value="0.947974"/>
+      <inertia ixx="0.00286449" ixy="0.00012235" ixz="-2.15676e-05" iyy="0.00102465" iyz="0.000265775" izz="0.00259958"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.00597627 0.039 0.0295" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <cylinder length="0.13" radius="0.05"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0030405 0.120388 0.0210924" rpy="1.5708 -7.51238e-15 -6.41154e-15"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_left_hip_pitch_visual.stl"/>
+      </geometry>
+      <material name="leg_left_hip_pitch_parts_material">
+        <color rgba="0.562885 0.5918 0.548895 0.734403"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_left_knee_pitch">
+    <inertial>
+      <origin xyz="-4.14041e-05 -0.112249 0.0257397" rpy="0 0 0"/>
+      <mass value="0.653864"/>
+      <inertia ixx="0.00230126" ixy="-4.24923e-07" ixz="1.36589e-06" iyy="0.000559753" iyz="3.7889e-05" izz="0.00203727"/>
+    </inertial>
+    <collision>
+      <origin xyz="-5.40778e-15 -0.115 0.022" rpy="-1.5708 1.5708 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.04"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-4.14041e-05 -0.112249 0.0257397" rpy="1.5708 1.51122e-14 3.14159"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_left_knee_pitch_visual.stl"/>
+      </geometry>
+      <material name="leg_left_knee_pitch_parts_material">
+        <color rgba="0.664553 0.686049 0.654152 0.805901"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_left_ankle_pitch">
+    <inertial>
+      <origin xyz="0.0131065 0.0273743 0.0274153" rpy="0 0 0"/>
+      <mass value="0.106196"/>
+      <inertia ixx="0.000188241" ixy="-2.50802e-05" ixz="-7.26755e-06" iyy="0.000142962" iyz="-7.72963e-06" izz="8.17202e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0131065 0.0273743 0.0274153" rpy="1.5708 -3.63091e-15 -2.10124e-13"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_left_ankle_pitch_visual.stl"/>
+      </geometry>
+      <material name="leg_left_ankle_pitch_parts_material">
+        <color rgba="0.866867 0.866867 0.866867 0.928786"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_left_ankle_roll">
+    <inertial>
+      <origin xyz="2.29341e-05 0.0226611 0.0197836" rpy="0 0 0"/>
+      <mass value="0.706476"/>
+      <inertia ixx="0.00198705" ixy="5.37011e-07" ixz="-8.3949e-07" iyy="0.00190341" iyz="0.000143151" izz="0.000619673"/>
+    </inertial>
+    <collision>
+      <origin xyz="1.45453e-14 0.03 0.006" rpy="1.5708 -1.5787e-13 -6.89171e-14"/>
+      <geometry>
+        <box size="0.072 0.22 0.04"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="2.29341e-05 0.0226611 0.0197836" rpy="1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_left_ankle_roll_visual.stl"/>
+      </geometry>
+      <material name="leg_left_ankle_roll_parts_material">
+        <color rgba="0.694564 0.714459 0.684938 0.831061"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="leg_left_ankle_roll_joint" type="revolute">
+    <origin xyz="0.03 0.05 0.025" rpy="-6.80837e-17 1.5708 0"/>
+    <parent link="leg_left_ankle_pitch"/>
+    <child link="leg_left_ankle_roll"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-0.261799" upper="0.261799"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_left_ankle_pitch_joint" type="revolute">
+    <origin xyz="-2.42341e-15 -0.16 -0.003" rpy="-1.42161e-14 1.87431e-14 -3.14159"/>
+    <parent link="leg_left_knee_pitch"/>
+    <child link="leg_left_ankle_pitch"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-0.785398" upper="0.785398"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_left_knee_pitch_joint" type="revolute">
+    <origin xyz="4.09395e-16 0.15 -0.018" rpy="-2.06358e-14 2.26246e-14 -3.14159"/>
+    <parent link="leg_left_hip_pitch"/>
+    <child link="leg_left_knee_pitch"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-2.63789e-13" upper="2.44346"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_left_hip_pitch_joint" type="revolute">
+    <origin xyz="0.027 -5.55112e-17 0.052" rpy="1.5708 -0.785398 -1.5708"/>
+    <parent link="leg_left_hip_yaw"/>
+    <child link="leg_left_hip_pitch"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-1.89805" upper="0.981748"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_left_hip_yaw_joint" type="revolute">
+    <origin xyz="0.027 1.11022e-16 -0.052" rpy="-1.5708 1.18214e-15 -1.5708"/>
+    <parent link="leg_left_hip_roll"/>
+    <child link="leg_left_hip_yaw"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-0.981748" upper="0.589049"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_left_hip_roll_joint" type="revolute">
+    <origin xyz="-0.0290919 0.08 0.542631" rpy="5.54477e-16 0.785398 -1.02056e-14"/>
+    <parent link="base"/>
+    <child link="leg_left_hip_roll"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-0.174533" upper="1.5708"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+
+  <!-- ============================================================ -->
+  <!-- RIGHT LEG (from bhl_original_view.urdf, unchanged) -->
+  <!-- ============================================================ -->
+
+  <link name="leg_right_hip_roll">
+    <inertial>
+      <origin xyz="0.00410941 -0.00018505 -0.0464478" rpy="0 0 0"/>
+      <mass value="0.83786"/>
+      <inertia ixx="0.000979766" ixy="-3.69135e-06" ixz="1.57667e-05" iyy="0.000896334" iyz="-4.74708e-06" izz="0.000727235"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.00410941 -0.00018505 -0.0464478" rpy="-8.73661e-15 -0.785398 -3.14159"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_right_hip_roll_visual.stl"/>
+      </geometry>
+      <material name="leg_right_hip_roll_parts_material">
+        <color rgba="0.514202 0.546917 0.498371 0.699497"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_right_hip_yaw">
+    <inertial>
+      <origin xyz="0.00411632 -1.3851e-05 0.0463238" rpy="0 0 0"/>
+      <mass value="0.837683"/>
+      <inertia ixx="0.000978901" ixy="-1.63559e-06" ixz="-1.90847e-05" iyy="0.000898454" iyz="-5.23378e-06" izz="0.000723868"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.00411632 -1.3851e-05 0.0463238" rpy="3.14159 -0.785398 -1.5708"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_right_hip_yaw_visual.stl"/>
+      </geometry>
+      <material name="leg_right_hip_yaw_parts_material">
+        <color rgba="0.514113 0.546836 0.49828 0.699434"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_right_hip_pitch">
+    <inertial>
+      <origin xyz="0.00319928 0.120388 -0.0210924" rpy="0 0 0"/>
+      <mass value="0.947974"/>
+      <inertia ixx="0.00286448" ixy="0.000117078" ixz="2.6845e-05" iyy="0.00102371" iyz="-0.000265774" izz="0.00259864"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.00597627 0.039 -0.0295" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <cylinder length="0.13" radius="0.05"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.00319928 0.120388 -0.0210924" rpy="1.5708 -6.12376e-16 1.36002e-15"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_right_hip_pitch_visual.stl"/>
+      </geometry>
+      <material name="leg_right_hip_pitch_parts_material">
+        <color rgba="0.562885 0.5918 0.548895 0.734403"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_right_knee_pitch">
+    <inertial>
+      <origin xyz="-5.09429e-05 0.112249 -0.0257397" rpy="0 0 0"/>
+      <mass value="0.653864"/>
+      <inertia ixx="0.00230126" ixy="1.34936e-06" ixz="-1.17826e-06" iyy="0.000559752" iyz="3.7889e-05" izz="0.00203727"/>
+    </inertial>
+    <collision>
+      <origin xyz="1.15304e-14 0.115 -0.022" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.04"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-5.09429e-05 0.112249 -0.0257397" rpy="1.5708 -3.96107e-15 2.66454e-15"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_right_knee_pitch_visual.stl"/>
+      </geometry>
+      <material name="leg_right_knee_pitch_parts_material">
+        <color rgba="0.664553 0.686049 0.654152 0.805901"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_right_ankle_pitch">
+    <inertial>
+      <origin xyz="0.0131065 0.0273743 -0.0274153" rpy="0 0 0"/>
+      <mass value="0.106196"/>
+      <inertia ixx="0.000188241" ixy="-2.50802e-05" ixz="7.26754e-06" iyy="0.000142962" iyz="7.72962e-06" izz="8.17203e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0131065 0.0273743 -0.0274153" rpy="1.5708 -1.46608e-14 9.60065e-14"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_right_ankle_pitch_visual.stl"/>
+      </geometry>
+      <material name="leg_right_ankle_pitch_parts_material">
+        <color rgba="0.866867 0.866867 0.866867 0.928786"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leg_right_ankle_roll">
+    <inertial>
+      <origin xyz="2.29341e-05 0.0226611 0.0197836" rpy="0 0 0"/>
+      <mass value="0.706476"/>
+      <inertia ixx="0.00198705" ixy="5.37011e-07" ixz="-8.3949e-07" iyy="0.00190341" iyz="0.000143151" izz="0.000619673"/>
+    </inertial>
+    <collision>
+      <origin xyz="5.16957e-15 0.03 0.006" rpy="1.5708 5.10932e-13 -1.95972e-13"/>
+      <geometry>
+        <box size="0.072 0.22 0.04"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="2.29341e-05 0.0226611 0.0197836" rpy="1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/berkeley_humanoid_lite/mesh/leg_right_ankle_roll_visual.stl"/>
+      </geometry>
+      <material name="leg_right_ankle_roll_parts_material">
+        <color rgba="0.694564 0.714459 0.684938 0.831061"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="leg_right_ankle_roll_joint" type="revolute">
+    <origin xyz="0.03 0.05 -0.025" rpy="-6.80837e-17 1.5708 0"/>
+    <parent link="leg_right_ankle_pitch"/>
+    <child link="leg_right_ankle_roll"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-0.261799" upper="0.261799"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_right_ankle_pitch_joint" type="revolute">
+    <origin xyz="1.37911e-15 0.16 0.003" rpy="1.12133e-14 1.06998e-14 -9.3342e-14"/>
+    <parent link="leg_right_knee_pitch"/>
+    <child link="leg_right_ankle_pitch"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-0.785398" upper="0.785398"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_right_knee_pitch_joint" type="revolute">
+    <origin xyz="-2.77556e-17 0.15 0.018" rpy="3.28904e-15 3.34869e-15 -1.30451e-15"/>
+    <parent link="leg_right_hip_pitch"/>
+    <child link="leg_right_knee_pitch"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-1.1191e-13" upper="2.44346"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_right_hip_pitch_joint" type="revolute">
+    <origin xyz="-0.027 -3.33067e-16 0.052" rpy="1.5708 -0.785398 -1.5708"/>
+    <parent link="leg_right_hip_yaw"/>
+    <child link="leg_right_hip_pitch"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-1.89805" upper="0.981748"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_right_hip_yaw_joint" type="revolute">
+    <origin xyz="-0.027 3.46945e-16 -0.052" rpy="-1.5708 3.44349e-15 1.5708"/>
+    <parent link="leg_right_hip_roll"/>
+    <child link="leg_right_hip_yaw"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-0.589049" upper="0.981748"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+  <joint name="leg_right_hip_roll_joint" type="revolute">
+    <origin xyz="-0.0290919 -0.08 0.542631" rpy="7.85621e-15 -0.785398 3.14159"/>
+    <parent link="base"/>
+    <child link="leg_right_hip_roll"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20" velocity="15" lower="-1.5708" upper="0.174533"/>
+    <joint_properties friction="0.1"/>
+  </joint>
+
+  <!-- ============================================================ -->
+  <!-- LEFT ARM: SO-ARM 101 -->
+  <!-- Mount: top-side of torso, outside collision box -->
+  <!-- Position: (0, +0.12, 0.82) — y=0.12 is outside box y=+-0.07 -->
+  <!-- Orientation: rpy=(pi, 0, pi/2) — flipped upside-down so arm -->
+  <!--   hangs below, yaw rotated 90deg so arm extends to the side -->
+  <!-- ============================================================ -->
+
+  <!-- ============================================================ -->
+  <!-- SHOULDER STRUCTURE: 3kg boxes connecting base to SO-ARM -->
+  <!-- Box size: 0.08 x 0.05 x 0.15m (x, y, z) -->
+  <!-- Position: between base wall (y=0.07) and SO-ARM mount (y=0.12) -->
+  <!-- ============================================================ -->
+
+  <material name="structure_material">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+
+  <!-- Left shoulder structure -->
+  <link name="structure_left">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.00625" ixy="0" ixz="0" iyy="0.007225" iyz="0" izz="0.002225"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.08 0.05 0.15"/>
+      </geometry>
+      <material name="structure_material"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.08 0.05 0.15"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="structure_left_joint" type="fixed">
+    <origin xyz="0 0.095 0.71" rpy="0 0 0"/>
+    <parent link="base"/>
+    <child link="structure_left"/>
+  </joint>
+
+  <!-- Right shoulder structure -->
+  <link name="structure_right">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.00625" ixy="0" ixz="0" iyy="0.007225" iyz="0" izz="0.002225"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.08 0.05 0.15"/>
+      </geometry>
+      <material name="structure_material"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.08 0.05 0.15"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="structure_right_joint" type="fixed">
+    <origin xyz="0 -0.095 0.71" rpy="0 0 0"/>
+    <parent link="base"/>
+    <child link="structure_right"/>
+  </joint>
+
+  <!-- SO-ARM materials -->
+  <material name="soarm_3d_printed">
+    <color rgba="1.0 0.82 0.12 1.0"/>
+  </material>
+  <material name="soarm_sts3215">
+    <color rgba="0.1 0.1 0.1 1.0"/>
+  </material>
+
+  <!-- Left arm base -->
+  <link name="soarm_left_base_link">
+    <inertial>
+      <origin xyz="0.0137179 -5.19711e-05 0.0334843" rpy="0 0 0"/>
+      <mass value="0.147"/>
+      <inertia ixx="0.000114686" ixy="-4.59787e-07" ixz="4.97151e-06" iyy="0.000136117" iyz="9.75275e-08" izz="0.000130364"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.00636471 -9.94414e-05 -0.0024" rpy="1.5708 -1.67685e-15 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/base_motor_holder_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.00636471 -9.94414e-05 -0.0024" rpy="1.5708 -1.67685e-15 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/base_motor_holder_so101_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.00636471 -8.97657e-09 -0.0024" rpy="1.5708 -2.78073e-29 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/base_so101_v2.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.00636471 -8.97657e-09 -0.0024" rpy="1.5708 -2.78073e-29 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/base_so101_v2.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0263353 -8.97657e-09 0.0437" rpy="-8.21148e-16 7.84513e-18 1.249e-15"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0263353 -8.97657e-09 0.0437" rpy="-8.21148e-16 7.84513e-18 1.249e-15"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0309827 -0.000199441 0.0474" rpy="1.5708 -1.35493e-14 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/waveshare_mounting_plate_so101_v2.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0309827 -0.000199441 0.0474" rpy="1.5708 -1.35493e-14 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/waveshare_mounting_plate_so101_v2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint: base to left arm -->
+  <!-- xyz=(0, 0.12, 0.82): y outside box (0.07+0.05 clearance), z at torso top -->
+  <!-- rpy=(pi, 0, pi/2): flip upside-down + rotate 90 so arm faces outward -->
+  <joint name="soarm_left_base_joint" type="fixed">
+    <origin xyz="0 0.12 0.71" rpy="0 1.5708 1.5708"/>
+    <parent link="base"/>
+    <child link="soarm_left_base_link"/>
+  </joint>
+
+  <!-- Left shoulder -->
+  <link name="soarm_left_shoulder_link">
+    <inertial>
+      <origin xyz="-0.0307604 -1.66727e-05 -0.0252713" rpy="0 0 0"/>
+      <mass value="0.100006"/>
+      <inertia ixx="8.3759e-05" ixy="7.55525e-08" ixz="-1.16342e-06" iyy="8.10403e-05" iyz="1.54663e-07" izz="2.39783e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.0303992 0.000422241 -0.0417" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0303992 0.000422241 -0.0417" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0675992 -0.000177759 0.0158499" rpy="1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/motor_holder_so101_base_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0675992 -0.000177759 0.0158499" rpy="1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/motor_holder_so101_base_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0122008 2.22413e-05 0.0464" rpy="-1.5708 2.35221e-33 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/rotation_pitch_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0122008 2.22413e-05 0.0464" rpy="-1.5708 2.35221e-33 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/rotation_pitch_so101_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_left_shoulder_pan" type="revolute">
+    <origin xyz="0.0388353 -8.97657e-09 0.0624" rpy="3.14159 4.18253e-17 -3.14159"/>
+    <parent link="soarm_left_base_link"/>
+    <child link="soarm_left_shoulder_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.91986" upper="1.91986"/>
+  </joint>
+
+  <!-- Left upper arm -->
+  <link name="soarm_left_upper_arm_link">
+    <inertial>
+      <origin xyz="-0.0898471 -0.00838224 0.0184089" rpy="0 0 0"/>
+      <mass value="0.103"/>
+      <inertia ixx="4.08002e-05" ixy="-1.97819e-05" ixz="-4.03016e-08" iyy="0.000147318" iyz="8.97326e-09" izz="0.000142487"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.11257 -0.0155 0.0187" rpy="-3.14159 -5.27356e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.11257 -0.0155 0.0187" rpy="-3.14159 -5.27356e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.065085 0.012 0.0182" rpy="3.14159 -0 -1.30911e-30"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/upper_arm_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.065085 0.012 0.0182" rpy="3.14159 -0 -1.30911e-30"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/upper_arm_so101_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_left_shoulder_lift" type="revolute">
+    <origin xyz="-0.0303992 -0.0182778 -0.0542" rpy="-1.5708 0 0"/>
+    <parent link="soarm_left_shoulder_link"/>
+    <child link="soarm_left_upper_arm_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.74533" upper="1.74533"/>
+  </joint>
+
+  <!-- Left lower arm -->
+  <link name="soarm_left_lower_arm_link">
+    <inertial>
+      <origin xyz="-0.0980701 0.00324376 0.0182831" rpy="0 0 0"/>
+      <mass value="0.104"/>
+      <inertia ixx="2.87438e-05" ixy="7.41152e-06" ixz="1.26409e-06" iyy="0.000159844" iyz="-4.90188e-08" izz="0.00014529"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.0648499 -0.032 0.0182" rpy="3.14159 -0 6.67202e-31"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/under_arm_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0648499 -0.032 0.0182" rpy="3.14159 -0 6.67202e-31"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/under_arm_so101_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0648499 -0.032 0.018" rpy="-3.14159 -2.55351e-15 -1.83387e-30"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/motor_holder_so101_wrist_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0648499 -0.032 0.018" rpy="-3.14159 -2.55351e-15 -1.83387e-30"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/motor_holder_so101_wrist_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.1224 0.0052 0.0187" rpy="-3.14159 -7.88861e-31 -3.14159"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.1224 0.0052 0.0187" rpy="-3.14159 -7.88861e-31 -3.14159"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_left_elbow_flex" type="revolute">
+    <origin xyz="-0.11257 -0.028 1.73763e-16" rpy="-3.63608e-16 8.74301e-16 0"/>
+    <parent link="soarm_left_upper_arm_link"/>
+    <child link="soarm_left_lower_arm_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.6755" upper="1.6755"/>
+  </joint>
+
+  <!-- Left wrist -->
+  <link name="soarm_left_wrist_link">
+    <inertial>
+      <origin xyz="-0.000103312 -0.0386143 0.0281156" rpy="0 0 0"/>
+      <mass value="0.079"/>
+      <inertia ixx="3.68263e-05" ixy="1.7893e-08" ixz="-5.28128e-08" iyy="2.5391e-05" iyz="3.6412e-06" izz="2.1e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="8.32667e-17 -0.0424 0.0306" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_no_horn_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="8.32667e-17 -0.0424 0.0306" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_no_horn_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 -0.028 0.0181" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/wrist_roll_pitch_so101_v2.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.028 0.0181" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/wrist_roll_pitch_so101_v2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_left_wrist_flex" type="revolute">
+    <origin xyz="-0.1349 0.0052 3.62355e-17" rpy="4.02456e-15 8.67362e-16 -1.5708"/>
+    <parent link="soarm_left_lower_arm_link"/>
+    <child link="soarm_left_wrist_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.65806" upper="1.65806"/>
+  </joint>
+
+  <!-- Left gripper -->
+  <link name="soarm_left_gripper_link">
+    <inertial>
+      <origin xyz="0.000213627 0.000245138 -0.025187" rpy="0 0 0"/>
+      <mass value="0.087"/>
+      <inertia ixx="2.75087e-05" ixy="-3.35241e-07" ixz="-5.7352e-06" iyy="4.33657e-05" iyz="-5.17847e-08" izz="3.45059e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0077 0.0001 -0.0234" rpy="-1.5708 -5.19179e-17 -1.66533e-16"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0077 0.0001 -0.0234" rpy="-1.5708 -5.19179e-17 -1.66533e-16"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="8.32667e-17 -0.000218214 0.000949706" rpy="-3.14159 -5.55112e-17 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/wrist_roll_follower_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="8.32667e-17 -0.000218214 0.000949706" rpy="-3.14159 -5.55112e-17 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/wrist_roll_follower_so101_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_left_wrist_roll" type="revolute">
+    <origin xyz="5.55112e-17 -0.0611 0.0181" rpy="1.5708 0.0486795 3.14159"/>
+    <parent link="soarm_left_wrist_link"/>
+    <child link="soarm_left_gripper_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-2.74385" upper="2.84121"/>
+  </joint>
+
+  <!-- Left gripper frame -->
+  <link name="soarm_left_gripper_frame_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="soarm_left_gripper_frame_joint" type="fixed">
+    <origin xyz="-0.0079 -0.000218121 -0.0981274" rpy="0 3.14159 0"/>
+    <parent link="soarm_left_gripper_link"/>
+    <child link="soarm_left_gripper_frame_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+  <!-- Left moving jaw -->
+  <link name="soarm_left_moving_jaw_link">
+    <inertial>
+      <origin xyz="-0.00157495 -0.0300244 0.0192755" rpy="0 0 0"/>
+      <mass value="0.012"/>
+      <inertia ixx="6.61427e-06" ixy="-3.19807e-07" ixz="-5.90717e-09" iyy="1.89032e-06" iyz="-1.09945e-07" izz="5.28738e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="-5.55112e-17 -5.55112e-17 0.0189" rpy="9.53145e-17 6.93889e-18 1.24077e-24"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/moving_jaw_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-5.55112e-17 -5.55112e-17 0.0189" rpy="9.53145e-17 6.93889e-18 1.24077e-24"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/moving_jaw_so101_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_left_gripper" type="revolute">
+    <origin xyz="0.0202 0.0188 -0.0234" rpy="1.5708 -5.24284e-08 -1.41553e-15"/>
+    <parent link="soarm_left_gripper_link"/>
+    <child link="soarm_left_moving_jaw_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.174533" upper="1.74533"/>
+  </joint>
+
+  <!-- ============================================================ -->
+  <!-- RIGHT ARM: SO-ARM 101 (mirrored) -->
+  <!-- Mount: (0, -0.12, 0.82), rpy=(pi, 0, -pi/2) — mirrored -->
+  <!-- ============================================================ -->
+
+  <!-- Right arm base -->
+  <link name="soarm_right_base_link">
+    <inertial>
+      <origin xyz="0.0137179 -5.19711e-05 0.0334843" rpy="0 0 0"/>
+      <mass value="0.147"/>
+      <inertia ixx="0.000114686" ixy="-4.59787e-07" ixz="4.97151e-06" iyy="0.000136117" iyz="9.75275e-08" izz="0.000130364"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.00636471 -9.94414e-05 -0.0024" rpy="1.5708 -1.67685e-15 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/base_motor_holder_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.00636471 -9.94414e-05 -0.0024" rpy="1.5708 -1.67685e-15 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/base_motor_holder_so101_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.00636471 -8.97657e-09 -0.0024" rpy="1.5708 -2.78073e-29 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/base_so101_v2.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.00636471 -8.97657e-09 -0.0024" rpy="1.5708 -2.78073e-29 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/base_so101_v2.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0263353 -8.97657e-09 0.0437" rpy="-8.21148e-16 7.84513e-18 1.249e-15"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0263353 -8.97657e-09 0.0437" rpy="-8.21148e-16 7.84513e-18 1.249e-15"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0309827 -0.000199441 0.0474" rpy="1.5708 -1.35493e-14 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/waveshare_mounting_plate_so101_v2.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0309827 -0.000199441 0.0474" rpy="1.5708 -1.35493e-14 1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/waveshare_mounting_plate_so101_v2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint: base to right arm (mirrored y, mirrored yaw) -->
+  <joint name="soarm_right_base_joint" type="fixed">
+    <origin xyz="0 -0.12 0.71" rpy="0 1.5708 -1.5708"/>
+    <parent link="base"/>
+    <child link="soarm_right_base_link"/>
+  </joint>
+
+  <!-- Right shoulder -->
+  <link name="soarm_right_shoulder_link">
+    <inertial>
+      <origin xyz="-0.0307604 -1.66727e-05 -0.0252713" rpy="0 0 0"/>
+      <mass value="0.100006"/>
+      <inertia ixx="8.3759e-05" ixy="7.55525e-08" ixz="-1.16342e-06" iyy="8.10403e-05" iyz="1.54663e-07" izz="2.39783e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.0303992 0.000422241 -0.0417" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0303992 0.000422241 -0.0417" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0675992 -0.000177759 0.0158499" rpy="1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/motor_holder_so101_base_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0675992 -0.000177759 0.0158499" rpy="1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/motor_holder_so101_base_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.0122008 2.22413e-05 0.0464" rpy="-1.5708 2.35221e-33 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/rotation_pitch_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0122008 2.22413e-05 0.0464" rpy="-1.5708 2.35221e-33 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/rotation_pitch_so101_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_right_shoulder_pan" type="revolute">
+    <origin xyz="0.0388353 -8.97657e-09 0.0624" rpy="3.14159 4.18253e-17 -3.14159"/>
+    <parent link="soarm_right_base_link"/>
+    <child link="soarm_right_shoulder_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.91986" upper="1.91986"/>
+  </joint>
+
+  <!-- Right upper arm -->
+  <link name="soarm_right_upper_arm_link">
+    <inertial>
+      <origin xyz="-0.0898471 -0.00838224 0.0184089" rpy="0 0 0"/>
+      <mass value="0.103"/>
+      <inertia ixx="4.08002e-05" ixy="-1.97819e-05" ixz="-4.03016e-08" iyy="0.000147318" iyz="8.97326e-09" izz="0.000142487"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.11257 -0.0155 0.0187" rpy="-3.14159 -5.27356e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.11257 -0.0155 0.0187" rpy="-3.14159 -5.27356e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.065085 0.012 0.0182" rpy="3.14159 -0 -1.30911e-30"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/upper_arm_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.065085 0.012 0.0182" rpy="3.14159 -0 -1.30911e-30"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/upper_arm_so101_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_right_shoulder_lift" type="revolute">
+    <origin xyz="-0.0303992 -0.0182778 -0.0542" rpy="-1.5708 0 0"/>
+    <parent link="soarm_right_shoulder_link"/>
+    <child link="soarm_right_upper_arm_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.74533" upper="1.74533"/>
+  </joint>
+
+  <!-- Right lower arm -->
+  <link name="soarm_right_lower_arm_link">
+    <inertial>
+      <origin xyz="-0.0980701 0.00324376 0.0182831" rpy="0 0 0"/>
+      <mass value="0.104"/>
+      <inertia ixx="2.87438e-05" ixy="7.41152e-06" ixz="1.26409e-06" iyy="0.000159844" iyz="-4.90188e-08" izz="0.00014529"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.0648499 -0.032 0.0182" rpy="3.14159 -0 6.67202e-31"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/under_arm_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0648499 -0.032 0.0182" rpy="3.14159 -0 6.67202e-31"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/under_arm_so101_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.0648499 -0.032 0.018" rpy="-3.14159 -2.55351e-15 -1.83387e-30"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/motor_holder_so101_wrist_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0648499 -0.032 0.018" rpy="-3.14159 -2.55351e-15 -1.83387e-30"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/motor_holder_so101_wrist_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.1224 0.0052 0.0187" rpy="-3.14159 -7.88861e-31 -3.14159"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.1224 0.0052 0.0187" rpy="-3.14159 -7.88861e-31 -3.14159"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_right_elbow_flex" type="revolute">
+    <origin xyz="-0.11257 -0.028 1.73763e-16" rpy="-3.63608e-16 8.74301e-16 0"/>
+    <parent link="soarm_right_upper_arm_link"/>
+    <child link="soarm_right_lower_arm_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.6755" upper="1.6755"/>
+  </joint>
+
+  <!-- Right wrist -->
+  <link name="soarm_right_wrist_link">
+    <inertial>
+      <origin xyz="-0.000103312 -0.0386143 0.0281156" rpy="0 0 0"/>
+      <mass value="0.079"/>
+      <inertia ixx="3.68263e-05" ixy="1.7893e-08" ixz="-5.28128e-08" iyy="2.5391e-05" iyz="3.6412e-06" izz="2.1e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="8.32667e-17 -0.0424 0.0306" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_no_horn_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="8.32667e-17 -0.0424 0.0306" rpy="1.5708 1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_no_horn_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 -0.028 0.0181" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/wrist_roll_pitch_so101_v2.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.028 0.0181" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/wrist_roll_pitch_so101_v2.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_right_wrist_flex" type="revolute">
+    <origin xyz="-0.1349 0.0052 3.62355e-17" rpy="4.02456e-15 8.67362e-16 -1.5708"/>
+    <parent link="soarm_right_lower_arm_link"/>
+    <child link="soarm_right_wrist_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.65806" upper="1.65806"/>
+  </joint>
+
+  <!-- Right gripper -->
+  <link name="soarm_right_gripper_link">
+    <inertial>
+      <origin xyz="0.000213627 0.000245138 -0.025187" rpy="0 0 0"/>
+      <mass value="0.087"/>
+      <inertia ixx="2.75087e-05" ixy="-3.35241e-07" ixz="-5.7352e-06" iyy="4.33657e-05" iyz="-5.17847e-08" izz="3.45059e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0077 0.0001 -0.0234" rpy="-1.5708 -5.19179e-17 -1.66533e-16"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+      <material name="soarm_sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0077 0.0001 -0.0234" rpy="-1.5708 -5.19179e-17 -1.66533e-16"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/sts3215_03a_v1.stl"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="8.32667e-17 -0.000218214 0.000949706" rpy="-3.14159 -5.55112e-17 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/wrist_roll_follower_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="8.32667e-17 -0.000218214 0.000949706" rpy="-3.14159 -5.55112e-17 0"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/wrist_roll_follower_so101_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_right_wrist_roll" type="revolute">
+    <origin xyz="5.55112e-17 -0.0611 0.0181" rpy="1.5708 0.0486795 3.14159"/>
+    <parent link="soarm_right_wrist_link"/>
+    <child link="soarm_right_gripper_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-2.74385" upper="2.84121"/>
+  </joint>
+
+  <!-- Right gripper frame -->
+  <link name="soarm_right_gripper_frame_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-9"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
+  </link>
+
+  <joint name="soarm_right_gripper_frame_joint" type="fixed">
+    <origin xyz="-0.0079 -0.000218121 -0.0981274" rpy="0 3.14159 0"/>
+    <parent link="soarm_right_gripper_link"/>
+    <child link="soarm_right_gripper_frame_link"/>
+    <axis xyz="0 0 0"/>
+  </joint>
+
+  <!-- Right moving jaw -->
+  <link name="soarm_right_moving_jaw_link">
+    <inertial>
+      <origin xyz="-0.00157495 -0.0300244 0.0192755" rpy="0 0 0"/>
+      <mass value="0.012"/>
+      <inertia ixx="6.61427e-06" ixy="-3.19807e-07" ixz="-5.90717e-09" iyy="1.89032e-06" iyz="-1.09945e-07" izz="5.28738e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="-5.55112e-17 -5.55112e-17 0.0189" rpy="9.53145e-17 6.93889e-18 1.24077e-24"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/moving_jaw_so101_v1.stl"/>
+      </geometry>
+      <material name="soarm_3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="-5.55112e-17 -5.55112e-17 0.0189" rpy="9.53145e-17 6.93889e-18 1.24077e-24"/>
+      <geometry>
+        <mesh filename="../components/so-arm/assets/moving_jaw_so101_v1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="soarm_right_gripper" type="revolute">
+    <origin xyz="0.0202 0.0188 -0.0234" rpy="1.5708 -5.24284e-08 -1.41553e-15"/>
+    <parent link="soarm_right_gripper_link"/>
+    <child link="soarm_right_moving_jaw_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.174533" upper="1.74533"/>
+  </joint>
+
+</robot>

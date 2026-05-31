@@ -73,7 +73,20 @@ N_SUBSTEPS           = 8
 
 
 def load_policy(ckpt_path, obs_dim=45, act_dim=12, device="cpu"):
-    """RSL-RL checkpoint에서 actor MLP 추출."""
+    """RSL-RL checkpoint(.pt) 또는 ONNX(.onnx)에서 policy 로드."""
+    if ckpt_path.endswith(".onnx"):
+        import onnxruntime as ort
+
+        session = ort.InferenceSession(ckpt_path)
+        inp_name = session.get_inputs()[0].name
+
+        class OnnxWrapper:
+            def __call__(self, obs_np):
+                out = session.run(None, {inp_name: obs_np.reshape(1, -1).astype("float32")})[0]
+                return out.flatten()
+
+        return OnnxWrapper()
+
     import torch
     import torch.nn as nn
 
@@ -231,7 +244,22 @@ def run(args):
     else:
         print(f"[SIM2SIM] Loading policy: {args.ckpt}")
         policy = load_policy(args.ckpt, device=args.device)
-        policy.eval()
+        if hasattr(policy, "eval"):
+            policy.eval()
+
+    # ── 시퀀스 파싱: "dur,vx,vy,wz;dur,vx,vy,wz;..." ──
+    if args.seq:
+        seq_segments = []
+        for seg in args.seq.split(";"):
+            parts = [float(x) for x in seg.split(",")]
+            seq_segments.append((parts[0], np.array(parts[1:4], dtype=np.float32)))
+        total_duration = sum(s[0] for s in seq_segments)
+        print(f"[SIM2SIM] Sequence mode: {len(seq_segments)} segments, total {total_duration:.1f}s")
+        for i, (dur, c) in enumerate(seq_segments):
+            print(f"  seg{i}: {dur:.1f}s  vx={c[0]:.2f} vy={c[1]:.2f} wz={c[2]:.2f}")
+    else:
+        seq_segments = None
+        total_duration = args.duration
 
     cmd = np.array([args.vx, args.vy, args.wz], dtype=np.float32)
     print(f"[SIM2SIM] Command: vx={args.vx} vy={args.vy} wz={args.wz}")
@@ -253,7 +281,7 @@ def run(args):
         push_next_time = float(rng.uniform(push_min, push_max))
 
     last_action = np.zeros(12, dtype=np.float32)
-    total_steps = int(args.duration * CONTROL_HZ)
+    total_steps = int(total_duration * CONTROL_HZ)
     survived    = 0
     push_count  = 0
 
@@ -269,14 +297,28 @@ def run(args):
     print(f"[SIM2SIM] Running {total_steps} steps ({args.duration}s) ...")
 
     def _run_loop(viewer=None):
-        nonlocal survived, push_active_until, push_next_time, push_count
+        nonlocal survived, push_active_until, push_next_time, push_count, cmd
         for step in range(total_steps):
+            # 시퀀스 모드: 현재 시간에 해당하는 cmd 선택
+            if seq_segments is not None:
+                t_now = step / CONTROL_HZ
+                elapsed = 0.0
+                for dur, seg_cmd in seq_segments:
+                    elapsed += dur
+                    if t_now < elapsed:
+                        cmd[:] = seg_cmd
+                        break
+
             obs_np = get_obs()
 
             if policy is not None:
-                obs_t = torch.tensor(obs_np, dtype=torch.float32, device=args.device).unsqueeze(0)
-                with torch.inference_mode():
-                    action_np = policy(obs_t).squeeze(0).cpu().numpy()
+                if args.ckpt.endswith(".onnx"):
+                    action_np = policy(obs_np)
+                else:
+                    import torch
+                    obs_t = torch.tensor(obs_np, dtype=torch.float32, device=args.device).unsqueeze(0)
+                    with torch.inference_mode():
+                        action_np = policy(obs_t).squeeze(0).cpu().numpy()
                 action_np = np.nan_to_num(action_np, nan=0.0, posinf=1.0, neginf=-1.0)
             else:
                 action_np = np.zeros(12, dtype=np.float32)
@@ -348,7 +390,7 @@ def run(args):
 
     extra = f", pushes={push_count}" if (push_force > 0 or push_torque > 0) else ""
     print(f"[SIM2SIM] Done. Survived {survived}/{total_steps} steps "
-          f"({survived/CONTROL_HZ:.1f}s / {args.duration:.1f}s){extra}")
+          f"({survived/CONTROL_HZ:.1f}s / {total_duration:.1f}s){extra}")
 
 
 if __name__ == "__main__":
@@ -389,6 +431,8 @@ if __name__ == "__main__":
                         help="경사도 deg (gravity 벡터 회전, +x 방향 내리막 시뮬, default 0)")
     parser.add_argument("--com-offset", type=str, default="0,0,0", dest="com_offset",
                         help="base CoM offset 'x,y,z' meter (default 0,0,0). 예: '0.032,0,0' = +x로 32mm shift")
+    parser.add_argument("--seq", type=str, default="", dest="seq",
+                        help="시퀀스 'dur,vx,vy,wz;dur,vx,vy,wz;...' (지정 시 --duration/--vx/vy/wz 무시)")
     args = parser.parse_args()
 
     if not args.zero_action and not os.path.isfile(args.ckpt):
